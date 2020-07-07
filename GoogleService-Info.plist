@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>304287906727-ma2e0979f9npce7a42e5k89ituf0v7lg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.304287906727-ma2e0979f9npce7a42e5k89ituf0v7lg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>304287906727-eo6utri9110ia5cnc6755ji5194s0j6r.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCiggr9dJQ6Be0nam998ZcWFBQUAN9XsY4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>304287906727</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>io.socialup.deliver</string>
+	<key>PROJECT_ID</key>
+	<string>gestionsocialup</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gestionsocialup.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:304287906727:ios:96d158b604dc3bea93d482</string>
+	<key>DATABASE_URL</key>
+	<string>https://gestionsocialup.firebaseio.com</string>
+</dict>
+</plist>

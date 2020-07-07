@@ -1,0 +1,35 @@
+.portada-foto{
+    width: 100%;
+    max-width: 400px;
+    max-height: 200px;
+}
+
+ion-slide{
+    width: 106.667px;
+    background-color: grey;
+    height: 40px;
+    font-size: 15px;
+    color: white;
+    border-radius: 4px;
+    line-height: 30px;
+    margin: 1px 3px;
+}
+
+.seleccionado{
+    background-color: #f25717;
+}
+
+ion-avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 4px;
+}
+
+ion-avatar img{
+    border-radius: 4px;
+}
+
+.destacado{
+    background-color: #e7aa16;
+    color:white;
+}

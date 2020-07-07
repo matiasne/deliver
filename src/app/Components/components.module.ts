@@ -1,0 +1,22 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { HeaderComponent } from './header/header.component';
+
+
+@NgModule({
+imports: [
+    CommonModule,    
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule
+    ],
+  declarations: [
+    HeaderComponent
+  ],
+  exports: [
+    HeaderComponent
+  ]
+})
+export class ComponentsModule {}

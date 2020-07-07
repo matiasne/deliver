@@ -1,0 +1,55 @@
+<ion-header>
+  <app-header [titulo]="'Confirmar Pedido'" [button]="'back'">
+  </app-header>
+</ion-header>
+
+<ion-content>
+  <ion-card > 
+    <ion-card-header>
+      <!--ion-card-subtitle>Detalle de su pedido</ion-card-subtitle-->
+      <ion-card-title>Pedido en Curso</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+       
+        <ion-list-header>
+          Productos
+        </ion-list-header> 
+        <div *ngFor="let orden of pedidoActual.ordenes; let c = index">   
+          <ion-list>                   
+              <ion-item *ngFor="let producto of orden.productos; let p = index">
+                <ion-avatar slot="start">
+                  <img src="{{producto.foto}}" *ngIf="producto.foto">
+                  <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+                </ion-avatar>
+                <ion-label>
+                  <h2>{{producto.nombre}}</h2>
+                  <div *ngFor="let opcion of producto.opcionesSeleccionadas">
+                    <h3> + {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion | currency}}</span></h3>
+                  </div>
+                  <h3>{{producto.comentario}}</h3>
+                  <h3>{{producto.cantidad}} X {{producto.precio | currency}}</h3>
+                  <h3>subtotal:{{producto.precio * producto.cantidad | currency}}</h3>
+                </ion-label>
+                
+                <ion-button color="danger" size="large" slot="end" (click)="eliminarOrden(c,p)"><ion-icon  name="trash"></ion-icon></ion-button>
+       
+    
+              </ion-item>
+          
+            </ion-list>
+            
+        </div> 
+        
+    </ion-card-content>
+    
+  </ion-card>
+</ion-content>
+
+<ion-footer class="ion-no-border ion-padding">
+  <h3>Total: {{pedidoActual.total | currency}} <b>+ Costo de Envio</b></h3>
+  <ion-toolbar>
+    <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="confirmar()">Confirmar</ion-button>
+  </ion-toolbar>
+  
+</ion-footer>

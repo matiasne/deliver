@@ -1,0 +1,21 @@
+<ion-header>  
+  <ion-toolbar class="new-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  
+  <app-form-datos-usuario  
+    (onSelectValue)='setValue($event)'>
+  </app-form-datos-usuario>
+
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="guardar()">Guardar</ion-button>
+  </ion-toolbar>
+</ion-footer>

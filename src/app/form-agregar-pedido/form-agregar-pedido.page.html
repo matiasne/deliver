@@ -1,0 +1,87 @@
+<ion-header>
+  <app-header [titulo]="producto.nombre" [button]="'back'">
+  </app-header>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!--ion-card-->
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img src="{{producto.foto}}" *ngIf="producto.foto">
+        <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{producto.nombre}}</h2>
+        <p>{{producto.precio | currency}}</p>
+        <p>{{producto.description}}  </p>
+      </ion-label>
+    </ion-item>
+    <!--div class="icon">
+      <img class="img-icon" src="{{producto.foto}}" *ngIf="producto.foto">
+    </div> 
+    <ion-card-header>
+      <ion-card-subtitle center>{{producto.nombre}}</ion-card-subtitle>
+      <ion-card-title>{{producto.precio | currency}}</ion-card-title>
+      {{producto.description}}      
+    </ion-card-header-->
+    
+    <ion-card-content>
+       
+        <div *ngFor="let grupo of producto.gruposOpciones" class="form-card">
+          <ion-text color="primary">
+            <h4>{{grupo.nombre}} </h4>
+          </ion-text> 
+          <div *ngIf="grupo.maximo == 1">      
+            <p>Seleccione una opción</p>
+            <ion-radio-group>        
+              <ion-card *ngFor="let opcion of grupo.opciones;let i=index">
+                <ion-item>
+                  <ion-radio slot="start" (click)="seleccionarOpcion(grupo,opcion)"></ion-radio>                      
+                  <ion-label text-wrap>
+                    <b>{{opcion.nombre}}</b> 
+                    <span *ngIf="opcion.precioVariacion != 0">
+                      {{opcion.precioVariacion | currency}}  
+                    </span>
+                  </ion-label>
+                </ion-item>                  
+              </ion-card>
+            </ion-radio-group>
+          </div>
+      
+          <div *ngIf="grupo.maximo > 1">
+            <p>Seleccione de {{grupo.minimo}} a {{grupo.maximo}} opciones</p>
+            <ion-item *ngFor="let opcion of grupo.opciones; let i = index">
+              <ion-label>
+                {{opcion.nombre}}
+                <span *ngIf="opcion.precioVariacion != 0">
+                  {{opcion.precioVariacion | currency}}  
+                </span>
+              </ion-label>
+              <ion-checkbox (click)="seleccionarOpcionCheck(grupo,opcion)"></ion-checkbox>
+            </ion-item>
+          </div>      
+        </div>
+
+        <ion-item lines="none">
+          <ion-button class="btn-agregar" color="primary" slot="start" (click)="restarCantidad()"><ion-icon name="remove"></ion-icon></ion-button>
+          Cantidad: {{cantidad}}
+          <ion-button class="btn-agregar"  color="primary" slot="end" (click)="sumarCantidad()"><ion-icon name="add"></ion-icon></ion-button>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label position="floating">Comentario adicional</ion-label>
+          <ion-textarea class="ion-textarea-bordes" [(ngModel)]="comentario"></ion-textarea>
+        </ion-item>      
+    </ion-card-content>
+   
+  <!--/ion-card-->
+ 
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button class="btn-footer-atras" color="light" (click)="cancelar()">Atras</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="agregar()">Agregar</ion-button>
+  </ion-toolbar>
+</ion-footer>

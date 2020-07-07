@@ -1,0 +1,90 @@
+<ion-header>  
+  <app-header [titulo]="comercio.nombre" [button]="'back'">
+  </app-header>
+</ion-header>
+
+<ion-content>
+  
+    <img class="portada-foto" src="{{comercio.portada}}" />
+
+ 
+   
+    <ion-slides [options]="slideOpts" slidesPerView="2">
+      <ion-slide (click)="verProductosDestacados()" class="destacado">
+        <span>Destacados</span>
+      </ion-slide>
+      <ion-slide (click)="verProductos('')" >
+        <span >Todos</span>
+      </ion-slide>     
+      <ion-slide *ngFor="let categoria of categorias" (click)="verProductos(categoria)" 
+      [class.seleccionado]="categoria.seleccionado == true"
+      
+      >
+        <span >{{categoria.nombre}}</span>
+      </ion-slide>
+    </ion-slides>      
+  
+
+    <div >
+
+        
+     
+     
+      <ion-list lines="none">
+       
+            
+
+            <ion-list-header>
+                <ion-button color="primary" style="margin-top: -1px; height: 42px;float:right" (click)="presentAlertPrompt()">
+                    <ion-icon name="search"></ion-icon>&nbsp; Buscar
+                </ion-button>
+            </ion-list-header>
+         
+            <div *ngIf="verDestacados == 'true'">
+              <ion-item  class="item-producto" *ngFor="let producto of productosDestacados" (click)="presentModalAgregarPedido(producto)">
+                <ion-avatar slot="start">
+                  <img src="{{producto.foto}}" *ngIf="producto.foto">
+                  <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+                </ion-avatar>
+                <ion-label>
+                  <h2><b>{{producto.nombre}}</b></h2>
+                  <p>
+                    {{producto.precio| currency}}
+                  </p>  
+                  <p>
+                    destacado
+                  </p>              
+                </ion-label> 
+              </ion-item>
+            </div>
+            <div *ngIf="verNoDestacados == 'true'">
+              <ion-item  class="item-producto" *ngFor="let producto of productosFiltrados" (click)="presentModalAgregarPedido(producto)">
+                <ion-avatar slot="start">
+                  <img src="{{producto.foto}}" *ngIf="producto.foto">
+                  <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+                </ion-avatar>
+                <ion-label>
+                  <h2><b>{{producto.nombre}}</b></h2>
+                  <p>
+                    {{producto.precio| currency}}
+                  </p>              
+                </ion-label> 
+              </ion-item>  
+            </div>
+        
+          
+          
+        </ion-list>
+       
+      </div>
+ 
+
+  
+  <div class="space">
+    
+  </div> 
+  
+</ion-content>
+<ion-footer *ngIf="pedidoActual.on" class="ion-no-border ion-padding">
+  <ion-button expand="full" size="large" class="margin0" color="success" (click)="irCarrito()">Hacer Pedido: {{pedidoActual.total | currency}}</ion-button>
+</ion-footer>

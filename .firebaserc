@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "gestionsocialup"
+  },
+  "targets": {
+    "gestionsocialup": {
+      "hosting": {
+        "pedidos": [
+          "pedidossocialup"
+        ]
+      }
+    }
+  }
+}

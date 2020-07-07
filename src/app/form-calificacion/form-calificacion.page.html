@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Califica este pedido!</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-text color="primary">      
+    Velocidad:      
+  </ion-text>
+  <ion-item>   
+    <app-input-calificacion
+      (onSelectValue)='setVelocidad($event)'>
+    </app-input-calificacion>
+  </ion-item>
+
+  <ion-text color="primary">      
+    Producto:      
+  </ion-text>
+  <ion-item>    
+    <app-input-calificacion
+      (onSelectValue)='setProducto($event)'>
+    </app-input-calificacion>
+  </ion-item>
+
+  <ion-text color="primary">      
+    Servicio:      
+  </ion-text>  
+  <ion-item>      
+    <app-input-calificacion
+      (onSelectValue)='setServicio($event)'>
+    </app-input-calificacion>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Comentario adicional</ion-label>
+    <ion-textarea [(ngModel)]="calificacion.comentario"></ion-textarea>
+  </ion-item>   
+
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="guardar()">Confirmar</ion-button>
+  </ion-toolbar>
+</ion-footer>

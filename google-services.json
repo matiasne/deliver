@@ -1,0 +1,235 @@
+{
+  "project_info": {
+    "project_number": "304287906727",
+    "firebase_url": "https://gestionsocialup.firebaseio.com",
+    "project_id": "gestionsocialup",
+    "storage_bucket": "gestionsocialup.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304287906727:android:bec31be4d1a6795393d482",
+        "android_client_info": {
+          "package_name": "io.socialup.deliver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOvfq-bu_1Abl_YGO1hp51hc0RpXYjb_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "304287906727-se1gqf13oj4094aja1qslncchm95t8ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.socialup.pedidos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304287906727:android:29005dbfa70d9aa893d482",
+        "android_client_info": {
+          "package_name": "io.socialup.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304287906727-e74tr43teupjqhqhscnm8o6075d82gmf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.delivery",
+            "certificate_hash": "b4f8b176fd31c750e5b8f59d49d5b56dc2c11b6a"
+          }
+        },
+        {
+          "client_id": "304287906727-mu0vuk0uhdnssotj4bjv8ldosf4vulgv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.delivery",
+            "certificate_hash": "b399dac3125207c0bf7e3ef70f97a9a15abe45f3"
+          }
+        },
+        {
+          "client_id": "304287906727-aaejh120q4h6p680ac8tgkcbf14elkhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.delivery",
+            "certificate_hash": "9caa88e5a78d2095b1be15baad21ac78c615ef9a"
+          }
+        },
+        {
+          "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOvfq-bu_1Abl_YGO1hp51hc0RpXYjb_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "304287906727-se1gqf13oj4094aja1qslncchm95t8ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.socialup.pedidos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304287906727:android:75fff1bf1778570293d482",
+        "android_client_info": {
+          "package_name": "io.socialup.gestion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304287906727-ntua2d9lni4adnmpbg1oan83k5gfdd91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.gestion",
+            "certificate_hash": "aaa1e76087bc95c213ced97c72c18702a171fbc2"
+          }
+        },
+        {
+          "client_id": "304287906727-nec92bif45ni54ffuccp4br3rnq8setm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.gestion",
+            "certificate_hash": "5259beb4e74ee1df988d2a339ff6e557acd35bf8"
+          }
+        },
+        {
+          "client_id": "304287906727-g7rem0frqn0q2h7s008uq5i81k0opc12.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.gestion",
+            "certificate_hash": "cb1119bc1c2fa4be1ad8304c8271cced0bed8f26"
+          }
+        },
+        {
+          "client_id": "304287906727-36o4ufrq11ep5brdc6iq0ki736je6d9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.gestion",
+            "certificate_hash": "b399dac3125207c0bf7e3ef70f97a9a15abe45f3"
+          }
+        },
+        {
+          "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOvfq-bu_1Abl_YGO1hp51hc0RpXYjb_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "304287906727-se1gqf13oj4094aja1qslncchm95t8ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.socialup.pedidos"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304287906727:android:7b00d5211130c91793d482",
+        "android_client_info": {
+          "package_name": "io.socialup.pedidos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304287906727-eo6utri9110ia5cnc6755ji5194s0j6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.pedidos",
+            "certificate_hash": "b4f8b176fd31c750e5b8f59d49d5b56dc2c11b6a"
+          }
+        },
+        {
+          "client_id": "304287906727-gj3slncrn23u35885rdg7i7l4vb0mntq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.pedidos",
+            "certificate_hash": "b399dac3125207c0bf7e3ef70f97a9a15abe45f3"
+          }
+        },
+        {
+          "client_id": "304287906727-8n23evb7ufoav7895mt95ucusvlefad4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.socialup.pedidos",
+            "certificate_hash": "9caa88e5a78d2095b1be15baad21ac78c615ef9a"
+          }
+        },
+        {
+          "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOvfq-bu_1Abl_YGO1hp51hc0RpXYjb_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304287906727-vo9q6hparl0spvhnbn19mfaojuuatqb1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "304287906727-se1gqf13oj4094aja1qslncchm95t8ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.socialup.pedidos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

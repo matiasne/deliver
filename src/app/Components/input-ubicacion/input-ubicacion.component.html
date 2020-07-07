@@ -1,0 +1,25 @@
+<div class="ion-padding">
+  <ion-text>
+    <h5>Dirección</h5>
+  </ion-text>
+  <div>
+    <ion-input autocomplete="off" id="pac-input" [(ngModel)]="direccion"  type="text"  ></ion-input>
+  </div>
+  <ion-row>
+    <ion-col>
+      <ion-text><h5>Piso</h5></ion-text>    
+      <div>
+        <ion-input name="piso" type="text" [(ngModel)]="localizacion.address.piso" (change)='onChange()'></ion-input>
+      </div>
+    </ion-col>
+    <ion-col>
+      <ion-text><h5>Puerta</h5></ion-text>    
+      <div>
+        <ion-input name="puerta" type="text" [(ngModel)]="localizacion.address.puerta" (change)='onChange()'></ion-input>
+      </div>
+    </ion-col>
+  </ion-row>  
+  <div class="map-container">
+    <div id="mapDiv" class="map"></div>
+  </div>  
+</div>

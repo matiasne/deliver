@@ -1,0 +1,64 @@
+<ion-header>
+  <app-header [button]="'menu'" ></app-header>  
+</ion-header>
+
+<ion-content class="ion-padding"> 
+  
+  <ion-item class="input-item">
+    <ion-input type="text" placeholder="Buscar" [(ngModel)]="filtro"></ion-input>
+    <ion-button slot="end" class="search-button" (click)="showComerciosSearch()"> <ion-icon name="search"></ion-icon></ion-button>
+   </ion-item>
+
+  <ion-slides [options]="slideOptsCategorias">
+    <ion-slide>     
+      <ion-card style="width: 100%; padding: 8px;" class="card-categoria" (click)="pedido()">
+        <img style="width: 100%;max-height: 200px;" src="../../assets/icons/pedido.png" />
+       <p>Pedido</p>     
+      </ion-card>
+    </ion-slide>
+    <ion-slide>     
+      <ion-card style="width: 100%; padding: 8px;" class="card-categoria" (click)="verComerciosFiltrados('restaurant')">
+        <img style="width: 100%;max-height: 200px;" src="../../assets/icons/resto.png" />
+       <p>Restaurantes</p>     
+      </ion-card>
+    </ion-slide>
+    <ion-slide>
+      <ion-card style="width: 100%; padding: 8px;" class="card-categoria"(click)="verComerciosFiltrados('kiosko')">
+        <img style="width: 100%;max-height: 200px;" src="../../assets/icons/kiosko.png" />
+        <p>Kiosko</p>       
+      </ion-card>
+    </ion-slide>
+    <ion-slide>
+      <ion-card style="width: 100%; padding: 8px;" class="card-categoria" (click)="verComerciosFiltrados('heladeria')">
+        <img style="width: 100%;max-height: 200px;" src="../../assets/icons/heladeria.png" />
+        <p>Heladería</p>       
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+  <ion-title style="margin-top:20px; font-weight: 300;"><h5>Nuevos Comercios</h5></ion-title>
+   
+  <ion-slides [options]="slideOpts">
+    <ion-slide *ngFor="let comercio of comercios ; let i=index">     
+      <ion-card style="width: 100%;" (click)="showComercio(comercio)">
+        <img style="width: 100%;max-height: 200px;" src="{{comercio.portada}}" />
+        <ion-card-header>
+          <ion-card-subtitle>{{comercio.nombre}}</ion-card-subtitle>
+          <p>{{comercio.estadoHorario}}</p>
+          <p *ngIf="comercio.estadoHorario == 'Cerrado'">
+            Abre a las {{comercio.proximaApertura}}
+          </p>          
+        </ion-card-header>        
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+  
+  <div class="space">
+
+  </div> 
+  
+  
+
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-button expand="full" size="large" class="margin0" color="primary" (click)="showComercios('')">Ver Comercios</ion-button>
+</ion-footer>

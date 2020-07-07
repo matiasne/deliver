@@ -1,0 +1,28 @@
+
+<ion-icon name="star-outline" *ngIf="calificacion < 0.5"></ion-icon>
+<ion-icon name="star-half-outline" *ngIf="calificacion >= 0.5 && calificacion < 1"></ion-icon>
+<ion-icon name="star" *ngIf="calificacion > 1"></ion-icon>
+
+<ion-icon name="star-outline" *ngIf="calificacion < 1.5"></ion-icon>
+<ion-icon name="star-half-outline" *ngIf="calificacion >= 1.5 && calificacion < 2"></ion-icon>
+<ion-icon name="star" *ngIf="calificacion > 2"></ion-icon>
+
+<ion-icon name="star-outline" *ngIf="calificacion < 2.5"></ion-icon>
+<ion-icon name="star-half-outline" *ngIf="calificacion >= 2.5 && calificacion < 3"></ion-icon>
+<ion-icon name="star" *ngIf="calificacion > 3"></ion-icon>
+
+<ion-icon name="star-outline" *ngIf="calificacion < 3.5"></ion-icon>
+<ion-icon name="star-half-outline" *ngIf="calificacion >= 3.5 && calificacion < 4"></ion-icon>
+<ion-icon name="star" *ngIf="calificacion > 4"></ion-icon>
+
+<ion-icon name="star-outline" *ngIf="calificacion < 4.5"></ion-icon>
+<ion-icon name="star-half-outline" *ngIf="calificacion >= 4.5 && calificacion < 5"></ion-icon>
+<ion-icon name="star" *ngIf="calificacion >= 5"></ion-icon>
+
+<div *ngIf="!calificacion">
+  <ion-icon name="star-outline"></ion-icon>
+  <ion-icon name="star-outline"></ion-icon>
+  <ion-icon name="star-outline"></ion-icon>
+  <ion-icon name="star-outline"></ion-icon>
+  <ion-icon name="star-outline"></ion-icon>
+</div>

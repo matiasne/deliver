@@ -1,0 +1,16 @@
+<ion-toolbar class="header-background-color"> 
+
+  <ion-buttons slot="start" class="color-white" *ngIf="button == 'back'">
+    <ion-back-button></ion-back-button>
+  </ion-buttons>
+  <ion-buttons slot="start" class="color-white" *ngIf="button == 'menu'">
+    <ion-menu-button autoHide="false"></ion-menu-button>
+  </ion-buttons>
+
+  <p>{{titulo}}</p>
+  <!--img class="logo-icon" src="../../assets/logo.png" alt=""--> 
+  
+  <ion-button class="bar-button color-white" slot="end" (click)="irCarrito()">
+    <ion-icon name="cart"></ion-icon> {{pedidoActual.cantidadTotal}}
+  </ion-button>
+</ion-toolbar>  
