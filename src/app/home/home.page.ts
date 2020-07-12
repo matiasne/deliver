@@ -190,7 +190,7 @@ export class HomePage  {
 
   pedido(){
     var  element = document.createElement('a') as HTMLElement;
-    element.setAttribute('href', 'https://wa.me/549357131-1267?text=Hola! Necesito un pedido especial');
+    element.setAttribute('href', 'https://wa.me/5493571666966?text=Hola! Necesito un pedido especial');
     element.setAttribute('style', 'display:none;');
     element.click();
   }
