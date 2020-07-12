@@ -47,6 +47,18 @@
                 <h4>Mis Pedidos</h4>
               </ion-label>
             </ion-item>
+            <ion-item (click)="terminos()" lines="none" *ngIf="isLoggedIn == true">
+              <ion-icon color="primary" slot="start" name="document-text-outline"></ion-icon>
+              <ion-label>
+                <h4>Términos y Condiciones</h4>
+              </ion-label>
+            </ion-item>
+            <ion-item (click)="preguntas()" lines="none" *ngIf="isLoggedIn == true">
+              <ion-icon color="primary" slot="start" name="document-text-outline"></ion-icon>
+              <ion-label>
+                <h4>Preguntas Frecuentes</h4>
+              </ion-label>
+            </ion-item>
             <!--ion-item (click)="registrarComercio()">
               <ion-icon slot="start" name="time-outline"></ion-icon>
               <ion-label>

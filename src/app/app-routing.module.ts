@@ -66,6 +66,14 @@ const routes: Routes = [
   {
     path: 'form-pedido-cadete',
     loadChildren: () => import('./form-pedido-cadete/form-pedido-cadete.module').then( m => m.FormPedidoCadetePageModule)
+  },
+  {
+    path: 'details-terminos-condiciones',
+    loadChildren: () => import('./details-terminos-condiciones/details-terminos-condiciones.module').then( m => m.DetailsTerminosCondicionesPageModule)
+  },
+  {
+    path: 'details-preguntas-frecuentes',
+    loadChildren: () => import('./details-preguntas-frecuentes/details-preguntas-frecuentes.module').then( m => m.DetailsPreguntasFrecuentesPageModule)
   }
 ];
 

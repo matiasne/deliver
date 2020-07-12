@@ -44,7 +44,8 @@
               <ion-item  class="item-producto" *ngFor="let producto of productosDestacados" (click)="presentModalAgregarPedido(producto)">
                 <ion-avatar slot="start">
                   <img src="{{producto.foto}}" *ngIf="producto.foto">
-                  <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+                  <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
+                  <ion-icon class="icon-producto" name="medical-outline" *ngIf="!producto.foto"></ion-icon>
                 </ion-avatar>
                 <ion-label>
                   <h2><b>{{producto.nombre}}</b></h2>
@@ -61,7 +62,7 @@
               <ion-item  class="item-producto" *ngFor="let producto of productosFiltrados" (click)="presentModalAgregarPedido(producto)">
                 <ion-avatar slot="start">
                   <img src="{{producto.foto}}" *ngIf="producto.foto">
-                  <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
+                  <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
                 </ion-avatar>
                 <ion-label>
                   <h2><b>{{producto.nombre}}</b></h2>

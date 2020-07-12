@@ -11,7 +11,7 @@
         ></ion-input>
       </ion-col>
       <ion-col size="2">
-        <ion-button color="primary" style="margin-top: -1px; height: 42px;"  (click)="buscarComercio()">
+        <ion-button color="primary" style="margin-top: -1px; height: 42px;"  (click)="filtrarComercios()">
             <ion-icon name="search"></ion-icon>
         </ion-button>
       </ion-col>
@@ -21,7 +21,7 @@
     <ion-list-header>
       <h5>Comercios</h5>
     </ion-list-header>  
-    <ion-item  class="item-comercio" *ngFor="let comercio of comercios" (click)="showComercio(comercio)">
+    <ion-item  class="item-comercio" *ngFor="let comercio of comerciosFiltrados" (click)="showComercio(comercio)">
       <ion-avatar slot="start" class="icono-comercio">
         <img src="{{comercio.icono}}" *ngIf="comercio.icono">
       </ion-avatar>      

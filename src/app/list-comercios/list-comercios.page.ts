@@ -31,6 +31,8 @@ export class ListComerciosPage implements OnInit {
   public pedidoActual:Pedido;
   public loadingActive = false;
   public ultimoComercio = "";
+
+  public comerciosFiltrados = [];
   
   constructor(
     public modalController: ModalController,
@@ -61,8 +63,7 @@ export class ListComerciosPage implements OnInit {
 
   ngOnInit(){
     this.ultimoComercio = "";
-    if(this.route.snapshot.params.filtro)
-      this.palabraFiltro = this.route.snapshot.params.filtro;
+    
 
     this.buscarComercio();
   }
@@ -196,7 +197,37 @@ export class ListComerciosPage implements OnInit {
 
   twoDigits(n){
     return n > 9 ? "" + n: "0" + n;
-  }  
+  } 
+  
+  filtrarComercios() {
+
+    console.log(this.palabraFiltro)
+    //this.productosFiltrados = [];
+    this.comerciosFiltrados = this.comercios.filter(comercio => {   
+      
+      var retorno = false;
+
+      var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      var encontrado = false;
+      console.log(palabra)
+      if(comercio.nombre){
+        retorno =  (comercio.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
+        if(retorno)
+          encontrado = true;
+      }
+      
+      if(comercio.descripcion){
+        retorno =  (comercio.descripcion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
+        if(retorno)
+          encontrado = true;
+      } 
+     
+
+      if(encontrado){
+        return true;
+      }
+    });
+  }
 
   buscarComercio(){
     this.comercios = [];  
@@ -228,6 +259,11 @@ export class ListComerciosPage implements OnInit {
         
       });
       console.log(this.comercios);
+
+      if(this.route.snapshot.params.filtro){
+        this.palabraFiltro = this.route.snapshot.params.filtro;
+        this.filtrarComercios();
+      }
 
     })
 

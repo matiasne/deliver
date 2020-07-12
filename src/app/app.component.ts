@@ -140,6 +140,14 @@ export class AppComponent  {
     this.router.navigate(['/login']);
   }
 
+  terminos(){
+    this.router.navigate(['/details-terminos-condiciones']);   
+  }
+
+  preguntas(){
+    this.router.navigate(['/details-preguntas-frecuentes']);
+  }
+
   irHome(){
 
     if(localStorage.getItem('comercioUnico')){
