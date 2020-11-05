@@ -42,11 +42,9 @@ export class FormDatosEnvioPage implements OnInit {
 
     this.userSubs = this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
-      console.log(this.pedidoActual)
       if(this.pedidoActual.ordenes.length > 1){
         this.calcularDistancia = false;
       }
-      console.log(this.calcularDistancia)
      // if(this.pedidoActual.pedidos)
     });
 
@@ -72,24 +70,31 @@ export class FormDatosEnvioPage implements OnInit {
     const geo = geofirex.init(firebase);
     if(posiscionComercio.geopoint.Latitude !=""){
       this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.Latitude, user.posicion.geopoint.Longitude), geo.point(posiscionComercio.geopoint.Latitude, posiscionComercio.geopoint.Longitude)).toFixed(2))
+      console.log("distancia: ")
       console.log(this.distancia);
-      if(this.distancia > 0 || this.distancia <= 1.6) {
+      if(this.distancia > 0 && this.distancia <= 1.6) {
+        console.log(70)
         this.pedidoService.setCostoEnvio(70);
       }  
-      if(this.distancia > 1.6 || this.distancia <= 2) {
+      if(this.distancia > 1.6 && this.distancia <= 2) {
+        console.log(80)
         this.pedidoService.setCostoEnvio(80);
       }  
-      if(this.distancia > 2 || this.distancia <= 3) {
+      if(this.distancia > 2 && this.distancia <= 3) {
+        console.log(90)
         this.pedidoService.setCostoEnvio(90);
       }  
-      if(this.distancia > 3 || this.distancia <= 4) {
+      if(this.distancia > 3 && this.distancia <= 4) {
+        console.log(110)
         this.pedidoService.setCostoEnvio(110);
       }  
-      if(this.distancia > 4 || this.distancia <= 5) {
+      if(this.distancia > 4 && this.distancia <= 5) {
+        console.log(140)
         this.pedidoService.setCostoEnvio(140);
       }  
       
       if(this.distancia > 4){
+        console.log(200)
         this.pedidoService.setCostoEnvio(200);
       }
     }

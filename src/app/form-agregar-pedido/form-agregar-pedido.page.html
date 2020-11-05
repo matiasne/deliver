@@ -3,32 +3,30 @@
   </app-header>
 </ion-header>
 
-<ion-content class="ion-padding">
-  
+<ion-content class="ion-padding"> 
   <!--ion-card-->
     <ion-item lines="none">
       <ion-avatar slot="start">
         <img src="{{producto.foto}}" *ngIf="producto.foto">
+        <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
         <ion-icon name="star" *ngIf="!producto.foto"></ion-icon>
       </ion-avatar>
       <ion-label>
-        <h2>{{producto.nombre}}</h2>
-        <p>{{producto.precio | currency}}</p>
-        <p>{{producto.description}}  </p>
+        <h2><b>{{producto.nombre}}</b></h2>
+        <h1><b>{{precioMostrar | currency}}</b></h1>
+       
       </ion-label>
     </ion-item>
-    <!--div class="icon">
-      <img class="img-icon" src="{{producto.foto}}" *ngIf="producto.foto">
-    </div> 
-    <ion-card-header>
-      <ion-card-subtitle center>{{producto.nombre}}</ion-card-subtitle>
-      <ion-card-title>{{producto.precio | currency}}</ion-card-title>
-      {{producto.description}}      
-    </ion-card-header-->
+    <p>{{producto.descripcion}}  </p>
+    <ion-item lines="none">
+      <ion-button class="btn-agregar" color="primary" slot="start" (click)="restarCantidad()"><ion-icon name="remove"></ion-icon></ion-button>
+      Cantidad: {{producto.cantidad}} {{producto.unidad}}
+      <ion-button class="btn-agregar"  color="primary" slot="end" (click)="sumarCantidad()"><ion-icon name="add"></ion-icon></ion-button>
+    </ion-item>
+
     
-    <ion-card-content>
-       
-        <div *ngFor="let grupo of producto.gruposOpciones" class="form-card">
+    <ion-card-content>       
+        <div *ngFor="let grupo of producto.gruposOpciones;let grupoIndex=index" class="form-card">
           <ion-text color="primary">
             <h4>{{grupo.nombre}} </h4>
           </ion-text> 
@@ -58,17 +56,15 @@
                   {{opcion.precioVariacion | currency}}  
                 </span>
               </ion-label>
-              <ion-checkbox (click)="seleccionarOpcionCheck(grupo,opcion)"></ion-checkbox>
+              <ion-button class="btn-agregar-opcion" color="light" (click)="restarCantidadOpcion(grupoIndex,i)"><ion-icon name="remove"></ion-icon></ion-button>
+              &nbsp;&nbsp;{{opcion.cantidad}}&nbsp;&nbsp;
+              <ion-button class="btn-agregar-opcion" color="light" (click)="sumarCantidadOpcion(grupoIndex,i)" [disabled]="grupo.cantidadHabilitada"><ion-icon name="add"></ion-icon></ion-button>
+          
             </ion-item>
           </div>      
         </div>
 
-        <ion-item lines="none">
-          <ion-button class="btn-agregar" color="primary" slot="start" (click)="restarCantidad()"><ion-icon name="remove"></ion-icon></ion-button>
-          Cantidad: {{cantidad}}
-          <ion-button class="btn-agregar"  color="primary" slot="end" (click)="sumarCantidad()"><ion-icon name="add"></ion-icon></ion-button>
-        </ion-item>
-
+        
 
         <ion-item>
           <ion-label position="floating">Comentario adicional</ion-label>

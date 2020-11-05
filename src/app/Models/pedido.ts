@@ -18,6 +18,7 @@ export class Pedido{
    
     public estado = 0;
     public recibido = 0;
+    public comercio_nomostrar = 0;
     public cantidadTotal = 0;
     public total:number = 0;
     public ordenes:any = [];  
@@ -59,7 +60,7 @@ export class Pedido{
         var cantidadMenos= 0;
 
         var producto = this.ordenes[comercioIndex].productos[Productoindex];
-        totalARestar += (Number(producto.precio) * Number(producto.cantidad));
+        totalARestar += producto.precioTotal;
         cantidadMenos += producto.cantidad;
         
         this.cantidadTotal -= cantidadMenos;
@@ -90,27 +91,14 @@ export class Pedido{
         var agregado = false;
         this.cantidadTotal += producto.cantidad;
 
-        this.total += Number(producto.precio) * Number(producto.cantidad);
+        this.total += Number(producto.precioTotal);
 
         this.ordenes.forEach((orden, index)  =>{
             
-                if(orden.comercioId == comercio.id){ 
-                
-                    /*var sumado = false;
-                    orden.productos.forEach((p,index)=>{
-                        console.log(p)
-                        if(p.id == producto.id){
-                            p.cantidad += producto.cantidad;
-                            orden.total += p.cantidad * p.precio;
-                            sumado = true;
-                        }
-                    });
-    
-                    if(!sumado){*/
-                        let objCopy = Object.assign({}, producto);
-                        orden.total += objCopy.cantidad * objCopy.precio;
-                        orden.productos.push(objCopy);
-                    //}
+                if(orden.comercioId == comercio.id){               
+                 
+                    let objCopy = Object.assign({}, producto);
+                    orden.productos.push(objCopy);                    
                     agregado = true;
                 }
                       
@@ -125,6 +113,7 @@ export class Pedido{
                 comercioId: comercio.id,
                 comercioNombre: comercio.nombre,
                 comercioTelefono: comercio.telefono,
+                comercioDireccion: comercio.direccion,
                 comercioPosicion: comercio.posicion,
                 productos: [prodCopy],   
                 total:this.total      

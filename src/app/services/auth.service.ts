@@ -130,10 +130,7 @@ export class AuthService {
         this.router.navigate(['/login']);
       })
       .catch(async (error) => {
-        console.log(error.message);
-
-        
-        
+        console.log(error.message);       
 
         if(error.message ==  "The email address is badly formatted."){
           

@@ -32,7 +32,7 @@ export class RegistroPage implements OnInit {
   }
 
   showRecuperar(){
-    this.router.navigate(['/recuperacion']);
+    this.router.navigate(['/recuperar-contrasena']);
   }
 
   signup(){

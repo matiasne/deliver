@@ -80,17 +80,14 @@ export class PedidoService {
 
     producto.gruposOpciones.forEach(grupo =>{
       grupo.opciones.forEach(opcion => {
-        if(opcion.seleccionada){
+        if(opcion.cantidad > 0){
 
-          producto.precio = Number(producto.precio) + Number(opcion.precioVariacion);
-
-          console.log(opcion.precioVariacion)
-          console.log(producto.precio)
 
           var opcionSeleccionada:OpcionSeleccionada = new OpcionSeleccionada();
           opcionSeleccionada.nombreGrupo = grupo.nombre;
           opcionSeleccionada.nombre = opcion.nombre;
           opcionSeleccionada.precioVariacion = opcion.precioVariacion;
+          opcionSeleccionada.cantidad = opcion.cantidad;
         
           producto.opcionesSeleccionadas.push(JSON.parse(JSON.stringify(opcionSeleccionada)));
           console.log(producto);
@@ -128,7 +125,7 @@ export class PedidoService {
   public getPedidoPendienteByCommerce(commerce_id){
     console.log(commerce_id)
     return this.firestore.collection('pedidos', ref => 
-      ref.where('comercioId','==',commerce_id).where('estado','<=',3)
+      ref.where('comercioId','==',commerce_id).where('estado','<=',4)
        ).snapshotChanges(); 
   }
 
@@ -160,7 +157,20 @@ export class PedidoService {
     );
   }
 
+  public setPedidoRechazado(pedido){
+    if(pedido.clienteId)
+      this.notificacionesService.enviarById(pedido.clienteId,"El pedido ha sido rechazado!","El comercio ha rechazado tu pedido.");
+    this.firestore.collection("pedidos").doc(pedido.id).update({rechazado: 1});
+    this.firestore.collection("pedidos").doc(pedido.id).update({estado: 5});
+  }
+
+  public setPedidoBuscado(pedido){
+    this.pedidoCalificando = pedido;
+    this.firestore.collection("pedidos").doc(pedido.id).update({buscado: 1});
+  }
+
   public setPedidoRecibido(pedido){
+
     this.pedidoCalificando = pedido;
     this.firestore.collection("pedidos").doc(pedido.id).update({recibido: 1});
     if(pedido.estado >=3){
@@ -172,6 +182,8 @@ export class PedidoService {
   public setPedidoTomado(pedido,minutos){
     if(pedido.clienteId)
       this.notificacionesService.enviarById(pedido.clienteId,"El pedido ha sido tomado!","Su comercio ya está realizando el pedido");
+    
+    this.comerciosService.addDemoraPromedio(pedido.comercioId,minutos)
     this.firestore.collection("pedidos").doc(pedido.id).update({estado: 1, demora: minutos});
   }
 
@@ -180,7 +192,7 @@ export class PedidoService {
     if(pedido.clienteId)
       this.notificacionesService.enviarById(pedido.clienteId,"El pedido esta listo!","Su comercio ya tiene el pedido listo");
 
-    this.comerciosService.getCommerce(pedido.comercioId).subscribe(snap=>{
+    let sub = this.comerciosService.getCommerce(pedido.comercioId).subscribe(snap=>{
       var comercio:any = snap.payload.data();
       
       console.log(comercio.rolCadetes);
@@ -190,6 +202,7 @@ export class PedidoService {
       comercio.rolCadetes.forEach(cadeteRolId => {
         this.notificacionesService.enviarByRolId(cadeteRolId,"El pedido esta listo!","Tienes un pedido listo para buscar!");
       });
+      sub.unsubscribe();
     })
 
 
@@ -205,20 +218,8 @@ export class PedidoService {
     }
   }
 
-  public setPedidoCancelado(pedido){
-    this.firestore.collection("pedidos").doc(pedido.id).update({estado: 3});
-   
-    if(pedido.clienteId)
-      this.notificacionesService.enviarById(pedido.clienteId,"Pedido Cancelado","")
-
-    if(pedido.recibido == 1){
-      this.borrarPedido(pedido);
-    }
-    this.setPedidoNoMostrar(pedido);
-  }
-
   public setPedidoNoMostrar(pedido){
-    this.firestore.collection("pedidos").doc(pedido.id).update({estado: 4});
+    this.firestore.collection("pedidos").doc(pedido.id).update({comercio_nomostrar: 1});
   }
 
   public borrarPedido(pedido){
@@ -246,15 +247,19 @@ export class PedidoService {
           orden.clienteId ="";
         orden.clienteTelefono= this.pedidoActual.cliente.telefono;
         orden.clienteNombre= this.pedidoActual.cliente.nombre;
-        orden.estado= this.pedidoActual.estado;   
+        orden.estado= this.pedidoActual.estado;  
+        orden.rechazado = "0"; 
         orden.recibido = "0";   
+        orden.comercio_nomostrar = "0";
+        orden.buscado = "0";
         orden.demora = "0";
+        
 
         console.log(orden.comercioId); 
 
         let telefono = "";
         
-        this.comerciosService.getCommerce(orden.comercioId).subscribe(snap=>{
+        let subs = this.comerciosService.getCommerce(orden.comercioId).subscribe(snap=>{
           var comercio:any = snap.payload.data();
           
           telefono = comercio.telefono;
@@ -284,6 +289,9 @@ export class PedidoService {
             element.setAttribute('style', 'display:none;');
             element.click();
           }
+
+          subs.unsubscribe();
+          
         })
 
        

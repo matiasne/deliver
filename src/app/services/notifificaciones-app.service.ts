@@ -22,10 +22,10 @@ export class NotifificacionesAppService {
   }
   
   public create(data:Notificacion) {   
-    const param = JSON.parse(JSON.stringify(data));
+   /* const param = JSON.parse(JSON.stringify(data));
     return this.firestore.collection(this.getCollection(data.userId)).add({...param,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    });*/
   }
 
   public get(userId:any,documentId: string) {

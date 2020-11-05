@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
     if(this.pedidoActual.on)
       this.router.navigate(['/carrito']);
     else
-      this.toastService.alert("No tienes nigún producto en tu carrito aún","")
+      this.toastService.mensaje("Aún no has hecho pedidos","Busca en todas nuestras opciones y anímate a hacer tu primer pedido")
   }  
 
 }

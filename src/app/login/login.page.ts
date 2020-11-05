@@ -63,8 +63,7 @@ export class LoginPage implements OnInit {
     }
     else{
       this.router.navigate(['/home']);
-    }
-    
+    }    
   }
 
   showRegistro(){
@@ -72,7 +71,7 @@ export class LoginPage implements OnInit {
   }
 
   showRecuperar(){
-    this.router.navigate(['/recuperacion']);
+    this.router.navigate(['/recuperar-contrasena']);
   }
 
   ionViewDidEnter(){

@@ -27,7 +27,7 @@ export class ComerciosService {
   }
 
   public getCommerce(documentId: string) {
-    return this.firestore.collection(this.collection, ref => ref.where("localidad","==","Almafuerte")).doc(documentId).snapshotChanges();
+    return this.firestore.collection(this.collection).doc(documentId).snapshotChanges();
   }
 
   public getUserRoles(){
@@ -37,7 +37,7 @@ export class ComerciosService {
   }
 
   public getAll(){
-    return this.firestore.collection(this.collection, ref => ref.where("localidad","==","Almafuerte").orderBy('nombre')).snapshotChanges();    
+    return this.firestore.collection(this.collection, ref => ref.orderBy('nombre')).snapshotChanges();    
   }  
 
   public getHorarios(comercioId){
@@ -45,11 +45,11 @@ export class ComerciosService {
   }  
 
   public getUltimos(){
-    return this.firestore.collection(this.collection, ref => ref.where("localidad","==","Almafuerte").orderBy('createdAt','asc').limit(5)).snapshotChanges(); 
+    return this.firestore.collection(this.collection, ref => ref.orderBy('createdAt','asc').limit(5)).snapshotChanges(); 
   }
 
   public buscarPorLocalidad(localidad){
-    return this.firestore.collection(this.collection, ref => ref.where("localidad","==","Almafuerte").orderBy('createdAt','asc').limit(5)).snapshotChanges(); 
+    return this.firestore.collection(this.collection, ref => ref.orderBy('createdAt','asc').limit(5)).snapshotChanges(); 
   }
 
 
@@ -68,10 +68,7 @@ export class ComerciosService {
   
 
   
-  public search(posicionActual,palabra,ultimo){
-
- 
-    
+  public search(posicionActual,palabra,ultimo){  
     
     if(ultimo == ""){
       console.log("!!!!!! primero")     
@@ -88,8 +85,7 @@ export class ComerciosService {
             .orderBy('nombre')
             .startAfter(ultimo)
             .limit(5)).snapshotChanges();    
-    }
-    
+    }    
   }  
 
   public setComercioSeleccionado(commerce){
@@ -98,5 +94,41 @@ export class ComerciosService {
 
   public getComercioSeleccionado(){
     localStorage.getItem('commercio_seleccionado');
+  }
+
+  public addDemoraPromedio(comercioId,demora){
+
+    const sfDocRefP = this.firestore.firestore.collection('comercios').doc(comercioId);
+  
+    this.firestore.firestore.runTransaction(transaction => 
+      // This code may get re-run multiple times if there are conflicts.
+      transaction.get(sfDocRefP)
+      .then(sfDoc => {
+
+        let promedioGeneralDemora = 0;
+        let cantidadValoracionesDemora =0;       
+
+        if(sfDoc.data().promedioGeneralDemora){
+          promedioGeneralDemora = ((sfDoc.data().promedioGeneralDemora * sfDoc.data().cantidadValoracionesDemora)+demora)/(sfDoc.data().cantidadValoracionesDemora+1)
+          cantidadValoracionesDemora = sfDoc.data().cantidadValoracionesDemora +1;
+          console.log("existia");
+        }else{
+          promedioGeneralDemora = demora;
+          cantidadValoracionesDemora = 1;
+          console.log("no existia");
+        }          
+
+        console.log(demora);
+        console.log(promedioGeneralDemora);
+
+        transaction.update(sfDocRefP, { 
+          promedioGeneralDemora:  promedioGeneralDemora,
+          cantidadValoracionesDemora:  cantidadValoracionesDemora, 
+        });
+        
+
+      })).then(() => console.log("Transaction successfully committed!"))
+    .catch(error => console.log("Transaction failed: ", error));
+
   }
 }

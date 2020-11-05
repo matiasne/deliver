@@ -4,6 +4,7 @@ import { ModalController, AlertController, NavController } from '@ionic/angular'
 import { Pedido } from '../Models/pedido';
 import { PedidoService } from '../services/global/pedido.service';
 import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-carrito',
@@ -20,6 +21,7 @@ export class CarritoPage implements OnInit {
     public alertController: AlertController,
     private navCtrl: NavController,
     private authService:AuthService,
+    private toastService:ToastService
   ) { }
 
   ngOnInit() {
@@ -67,7 +69,19 @@ export class CarritoPage implements OnInit {
       
     }
     else{
-      this.router.navigate(['/form-datos-envio']);
+      let subs = this.authService.authenticationState.subscribe(state => {
+        if (state) {   
+          this.router.navigate(['/form-datos-envio']);
+        }
+        else{
+          this.toastService.mensaje("","Por favor logueate antes de continuar!");
+          this.router.navigate(['login']);
+        }
+        if(subs)
+          subs.unsubscribe();
+      });
+     
+     
     }
 
     

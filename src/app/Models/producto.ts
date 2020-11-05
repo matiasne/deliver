@@ -16,11 +16,16 @@ export class Producto{
     public comentario="";
     public gruposOpciones:GrupoOpciones[];
     public opcionesSeleccionadas:OpcionSeleccionada[];
+    public precioTotal =0;
 
 	constructor(
 		
 		){
             this.gruposOpciones = [];
             this.opcionesSeleccionadas = [];
-	}
+    }
+    
+    public asignarValores(init?: Partial<Producto>) {
+        Object.assign(this, init);
+    }
 }

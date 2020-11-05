@@ -23,7 +23,7 @@ export class InputUbicacionComponent implements OnInit {
 
   @ViewChild('map',{static: false}) mapElement: ElementRef;
 
-   public map: any;
+  public map: any;
   public geo:any;
 
   public autocomplete:any;

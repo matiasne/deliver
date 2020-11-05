@@ -4,7 +4,7 @@
       
       <ion-content class="ion-padding">   
         <div *ngIf="isLoggedIn == true" class="user-photo">
-          <img *ngIf="photoURL" src="{{photoURL}}"  alt="">
+          <img style="width: 100%;height: 100%;" *ngIf="photoURL" src="{{photoURL}}"  alt="">
           <div *ngIf="!photoURL" class="user-icon">
               <img *ngIf="photoURL" src="../assets/icons/food.png"  alt="">
           </div>

@@ -38,9 +38,7 @@ export class FormDatosUsuarioComponent implements OnInit {
     this.geo = geofirex.init(firebase);
   }
 
-  ngOnInit() { 
-
-   
+  ngOnInit() {   
        
       this.onSelectValue.emit(this.user);
       this.user.asignarValores(JSON.parse(localStorage.getItem('user')));
@@ -229,12 +227,14 @@ export class FormDatosUsuarioComponent implements OnInit {
               this.user.address.provincia = addressComponents[i][pickedAddress[addressType][1]];
             
         }
-        this.user.direccion = direccion_completa;
+        //this.user.direccion = direccion_completa;
     }
 
     console.log(direccion_completa)
 
-    this.user.direccion = direccion_completa;
+    //this.user.direccion = direccion_completa;
+
+    this.onChange();
 
     setTimeout(function () {
       document.getElementById('pac-input').click();

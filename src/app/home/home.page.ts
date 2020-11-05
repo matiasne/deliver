@@ -85,56 +85,13 @@ export class HomePage  {
       this.isMobile = true;
     }
 
-    /*this.auth.getActualUserObservable().subscribe(data=>{
-      var user = data;
-      console.log(user.id);
-
-      if(this.auth.isAuthenticated()){ 
-
-        this.commerceSubscription = this._comerciosService.getUserRoles().subscribe((snpshot:any) => {   
-      
-          if(snpshot.payload){
-            this.commerce_id = snpshot.payload.doc.data().comercioId;
-            console.log(snpshot.payload.doc.data().rol);
-            
-            this.pedidoService.getPedidoPendienteByCommerce(this.commerce_id).subscribe((snapshot) => {       
-              snapshot.forEach((snap: any) => {
-                if(snap.payload.doc.data().status == 0){
-                  this.pushNotification("Nuevo Pedido!!");  
-                }    
-                if(snap.payload.doc.data().status == 2){
-                  this.pushNotification("El comercio: "+snap.payload.doc.data().commerceName+" ha tomado el pedido con una demora de :"+snap.payload.doc.data().demora);  
-                } 
-              });        
-            });    
-            this.commerceSubscription.unsubscribe();
-            }          
-        });
-      }
-    });*/
-
     
-
-    //this.backgroundMode.enable();
-    /*this.pedidoService.getPedidoChanges().subscribe((pedidos) => {     
-      this.pedidos = pedidos;     
-    });*/
   
     this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
     });
 
-    /*this.categoriesSubscription = this._categoriesService.getAll().subscribe((snapshot) => {
-      this.categorias = [];
-      snapshot.forEach((snap: any) => {
-        var categoria = snap.payload.doc.data();
-        categoria.id = snap.payload.doc.id;    
-        this.categorias.push(categoria); 
-      });
-      console.log(this.categorias);
-      this.categoriesSubscription.unsubscribe();
-    });*/
-
+    
     //this.presentLoading();
     this.comerciosSubscription = this._comerciosService.getUltimos().subscribe((snapshot) => {
       this.comercios = [];
@@ -143,6 +100,7 @@ export class HomePage  {
 
         var comercio = snap.payload.doc.data();  
         comercio.id = snap.payload.doc.id;
+        this.setearAbiertoCerrado(comercio);  
         this.comercios.push(comercio);
               
       });
@@ -246,8 +204,39 @@ export class HomePage  {
     this.router.navigate(['/list-comercios',{"filtro":this.filtro}]);
   }
 
-  showComerciosSearch(){
-    this.router.navigate(['/list-comercios',{"filtro":this.filtro}]);
+  showComercio(comercio){
+    let cerrado = false;
+    if(comercio.estadoHorario == "Cerrado"){
+      cerrado = true;
+      this.presentAlertCerrado("El comercio se encuentra actualmente cerrado! "+comercio.proximaApertura);
+    }
+    this.router.navigate(['/details-comercio',{
+      "id":comercio.id,
+      cerrado:cerrado
+    }]);
+  }
+
+  async presentAlertCerrado(message) {
+    const alert = await this.alertController.create({
+      header: 'Cerrado',
+      message: message,
+      buttons: [
+        {
+          text: 'Volver', 
+          handler: data => {
+            this.router.navigate(['/list-comercios']);            
+          } 
+        },
+        {
+          text: 'Continuar',
+          handler: data => {
+                     
+          }      
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   hideLoading(){
@@ -261,19 +250,14 @@ export class HomePage  {
       alert("No tienes nigún producto en tu carrito aún")
   }  
 
-  showComercios(filtro){
-    this.router.navigate(['/list-comercios',{filtro:filtro}]);
-  }
 
   verMas(){
     
   }
 
-  showComercio(comercio){
-    console.log(comercio)
-    this.router.navigate(['/details-comercio',{id:comercio.id}]);
+  showComercios(filtro){
+    this.router.navigate(['/list-comercios',{filtro:filtro}]);
   }
-
  
 
   ionViewDidLeave(){
@@ -323,6 +307,108 @@ export class HomePage  {
     });
 
     await alert.present();
+  }
+
+  setearAbiertoCerrado(comercio){
+    
+    var t = new Date();
+
+    
+    comercio.estadoHorario= "";
+
+    var nextOpen = false;
+    var open = false;
+
+      var horarios =[];
+
+    console.log(comercio.horarios)
+    if(comercio.horarios != ""){
+
+      
+      comercio.horarios.forEach((horario: any) => {
+        var hd = new Date(horario.desde);
+        var hh = new Date(horario.hasta);
+        var _horario ={
+          dia:horario.dia,
+          nombre:horario.nombre,
+          desde:{           
+            hour:hd.getHours(),
+            minute:hd.getMinutes()
+          },
+          hasta:{            
+            hour:hh.getHours(),
+            minute:hh.getMinutes()
+          }         
+        }        
+        horarios.push(_horario);
+      });
+
+      var ahora ={
+        dia : t.getDay(),
+        hour: t.getHours(),
+        minute : t.getMinutes()
+      } 
+      console.log("-----------------------") 
+      console.log("Comercio:"+comercio.nombre)
+
+      for(let i=0; i< horarios.length; i++) {      
+        
+        console.log("Ahora:")
+        console.log(ahora)
+        console.log("Analizando:")
+        console.log(horarios[i])
+        
+        var minutesHoy = (1440*ahora.dia) + (60 * ahora.hour) + ahora.minute; 
+        var timeDesde = 1440*Number(horarios[i].dia) + 60 * Number(horarios[i].desde.hour) + Number(horarios[i].desde.minute);
+        var timeHasta = 1440*Number(horarios[i].dia) + 60 * Number(horarios[i].hasta.hour) + Number(horarios[i].hasta.minute);
+    
+        var timeDesdeSiguiente = 0;       
+
+        let indexSiguiente = 0;
+        if(i < horarios.length-1){
+          indexSiguiente = i+1;         
+        }
+        else{
+          indexSiguiente = 0;
+        }
+
+        console.log("Siguiente:")
+        console.log(horarios[indexSiguiente]);
+
+        let _horarioSiguiente = horarios[indexSiguiente];
+        timeDesdeSiguiente = 1440*Number(_horarioSiguiente.dia) + 60 * Number(_horarioSiguiente.desde.hour) + Number(_horarioSiguiente.desde.minute);
+     
+        console.log(minutesHoy);
+        console.log(timeDesde);       
+        console.log(timeHasta)   
+         
+
+        
+  
+        if ( timeDesde <= minutesHoy && minutesHoy <= timeHasta) { //Está dentro del periodo
+          comercio.estadoHorario = "Abierto";  
+          return true;
+        }  
+  
+        if (timeHasta <= minutesHoy && minutesHoy <= timeDesdeSiguiente) {
+          comercio.estadoHorario = "Cerrado";  
+          if(ahora.dia == _horarioSiguiente.dia){
+            _horarioSiguiente.nombre = "hoy";
+          }
+          comercio.proximaApertura = "Abre "+_horarioSiguiente.nombre+" a las "+("0" + _horarioSiguiente.desde.hour).slice(-2)+":"+("0" + _horarioSiguiente.desde.minute).slice(-2)+" hs."; 
+          return true;
+        }
+
+       // if (minutesHoy <= timeDesdeSiguiente) {
+          comercio.estadoHorario = "Cerrado";  
+          comercio.proximaApertura = "Abre "+_horarioSiguiente.nombre+" a las "+("0" + _horarioSiguiente.desde.hour).slice(-2)+":"+("0" + _horarioSiguiente.desde.minute).slice(-2)+" hs."; 
+         
+        //}
+  
+      };
+    }
+
+    
   }
 
   

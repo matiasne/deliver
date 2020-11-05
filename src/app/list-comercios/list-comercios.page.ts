@@ -90,10 +90,6 @@ export class ListComerciosPage implements OnInit {
 
       
       comercio.horarios.forEach((horario: any) => {
-       
-        //var horario = snap.payload.doc.data();
-        //horario.id = snap.payload.doc.id; 
-
         var hd = new Date(horario.desde);
         var hh = new Date(horario.hasta);
         var _horario ={
@@ -106,90 +102,74 @@ export class ListComerciosPage implements OnInit {
           hasta:{            
             hour:hh.getHours(),
             minute:hh.getMinutes()
-          }
-         
-        }
-        
-        horarios.push(_horario);  
-
+          }         
+        }        
+        horarios.push(_horario);
       });
 
-     // console.log(horarios);
+      var ahora ={
+        dia : t.getDay(),
+        hour: t.getHours(),
+        minute : t.getMinutes()
+      } 
+      console.log("-----------------------") 
+      console.log("Comercio:"+comercio.nombre)
 
-      horarios.forEach( (_horario,index) => { 
-      
-        var hoy ={
-          dia : t.getDay(),
-          hour: t.getHours(),
-          minute : t.getMinutes()
-        } 
-       
-        console.log(hoy)
-        console.log(_horario)
+      for(let i=0; i< horarios.length; i++) {      
         
-        var minutesHoy = (1440*hoy.dia) + (60 * hoy.hour) + hoy.minute;   
-  
-        var timeDesde = 1440*Number(_horario.dia) + 60 * Number(_horario.desde.hour) + Number(_horario.desde.minute);
-        var timeHasta = 1440*Number(_horario.dia) + 60 * Number(_horario.hasta.hour) + Number(_horario.hasta.minute);
-  
-  
-        var nombreSiguiente = "";
-        var timeDesdeSiguiente = 0;
-        var horaSiguiente = 0;
-        var minutoSiguiente = 0;        
-        var diaSiguiente = 0;
+        console.log("Ahora:")
+        console.log(ahora)
+        console.log("Analizando:")
+        console.log(horarios[i])
+        
+        var minutesHoy = (1440*ahora.dia) + (60 * ahora.hour) + ahora.minute; 
+        var timeDesde = 1440*Number(horarios[i].dia) + 60 * Number(horarios[i].desde.hour) + Number(horarios[i].desde.minute);
+        var timeHasta = 1440*Number(horarios[i].dia) + 60 * Number(horarios[i].hasta.hour) + Number(horarios[i].hasta.minute);
+    
+        var timeDesdeSiguiente = 0;       
 
-       
-
-        if(index < _horario.length-1){
-          diaSiguiente = horarios[index+1].dia;
-          nombreSiguiente = horarios[index+1].nombre;
-          horaSiguiente = horarios[index+1].desde.hour; 
-          minutoSiguiente = horarios[index+1].desde.minute; 
-          timeDesdeSiguiente = 1440*Number(horarios[index+1].dia) + 60 * Number(horarios[index+1].desde.hour) + Number(horarios[index+1].desde.minute);
+        let indexSiguiente = 0;
+        if(i < horarios.length-1){
+          indexSiguiente = i+1;         
         }
         else{
-      //    console.log
-          diaSiguiente = horarios[0].dia;
-          nombreSiguiente = horarios[0].nombre;  
-
-          horaSiguiente = horarios[0].desde.hour; 
-          minutoSiguiente = horarios[0].desde.minute; 
-          timeDesdeSiguiente = 1440*8 + 60 * Number(horarios[0].desde.hour) + Number(horarios[0].desde.minute);
+          indexSiguiente = 0;
         }
-  
-    
-        console.log(timeDesde);
-        console.log(minutesHoy)
+
+        console.log("Siguiente:")
+        console.log(horarios[indexSiguiente]);
+
+        let _horarioSiguiente = horarios[indexSiguiente];
+        timeDesdeSiguiente = 1440*Number(_horarioSiguiente.dia) + 60 * Number(_horarioSiguiente.desde.hour) + Number(_horarioSiguiente.desde.minute);
+     
+        console.log(minutesHoy);
+        console.log(timeDesde);       
         console.log(timeHasta)   
-        console.log("-----------------------")   
+         
 
         
   
-        if ( timeDesde <= minutesHoy && minutesHoy <= timeHasta) {
+        if ( timeDesde <= minutesHoy && minutesHoy <= timeHasta) { //Está dentro del periodo
           comercio.estadoHorario = "Abierto";  
           return true;
         }  
   
         if (timeHasta <= minutesHoy && minutesHoy <= timeDesdeSiguiente) {
           comercio.estadoHorario = "Cerrado";  
-          if(hoy.dia == diaSiguiente){
-            nombreSiguiente = "hoy";
+          if(ahora.dia == _horarioSiguiente.dia){
+            _horarioSiguiente.nombre = "hoy";
           }
-          comercio.proximaApertura = "Abre "+nombreSiguiente+" a las "+("0" + horaSiguiente).slice(-2)+":"+("0" + minutoSiguiente).slice(-2)+" hs."; 
+          comercio.proximaApertura = "Abre "+_horarioSiguiente.nombre+" a las "+("0" + _horarioSiguiente.desde.hour).slice(-2)+":"+("0" + _horarioSiguiente.desde.minute).slice(-2)+" hs."; 
           return true;
         }
 
-        if (minutesHoy <= timeDesdeSiguiente) {
+       // if (minutesHoy <= timeDesdeSiguiente) {
           comercio.estadoHorario = "Cerrado";  
-         /* if(hoy.dia == diaSiguiente){
-            nombreSiguiente = "hoy";
-          }*/
-          comercio.proximaApertura = "Abre "+nombreSiguiente+" a las "+("0" + horaSiguiente).slice(-2)+":"+("0" + minutoSiguiente).slice(-2)+" hs."; 
-          return true;
-        }
+          comercio.proximaApertura = "Abre "+_horarioSiguiente.nombre+" a las "+("0" + _horarioSiguiente.desde.hour).slice(-2)+":"+("0" + _horarioSiguiente.desde.minute).slice(-2)+" hs."; 
+         
+        //}
   
-      });
+      };
     }
 
     
@@ -202,6 +182,10 @@ export class ListComerciosPage implements OnInit {
   filtrarComercios() {
 
     console.log(this.palabraFiltro)
+
+    if(this.palabraFiltro == ""){
+      this.comerciosFiltrados = this.comercios;
+    }
     //this.productosFiltrados = [];
     this.comerciosFiltrados = this.comercios.filter(comercio => {   
       
@@ -262,47 +246,13 @@ export class ListComerciosPage implements OnInit {
 
       if(this.route.snapshot.params.filtro){
         this.palabraFiltro = this.route.snapshot.params.filtro;
-        this.filtrarComercios();
+        
       }
+      this.filtrarComercios();
 
     })
 
-    /*this._comerciosService.buscarPorLocalidad("Almafuerte").subscribe(snapshot =>{
-
-      this.hideLoading();
-      this.comercios = [];
-      console.log(snapshot);
-      snapshot.forEach((snap: any) => {
-      
-          var comercio = snap.payload.doc.data();
-          comercio.id = snap.payload.doc.id; 
-          this.setearAbiertoCerrado(comercio);
-
-          let gps =  JSON.parse(this.auth.getGPSUser());
-          console.log(gps);
-          if(gps)
-            this.setDistancia(comercio,gps.lat,gps.lng);
-
-          this.comercios.push(comercio);   
-        
-      });
-
-    })*/
-    /*this._comerciosService.buscarPorDistancia(posicionUsuario.lat,posicionUsuario.lng,20,this.palabraFiltro,this.ultimoComercio).then(comercios => {
-    
-      this.hideLoading();    
-      this.comercios = comercios;
-      
-      this.comercios.forEach(element => {
-          this.setearAbiertoCerrado(element);
-      });
-      console.log(this.comercios);
   
-    },error=>{
-
-    });*/
-      
-    
 
 
     
@@ -352,10 +302,15 @@ export class ListComerciosPage implements OnInit {
   }
 
   showComercio(comercio){
+    let cerrado = false;
     if(comercio.estadoHorario == "Cerrado"){
+      cerrado = true;
       this.presentAlert("El comercio se encuentra actualmente cerrado! "+comercio.proximaApertura);
     }
-    this.router.navigate(['/details-comercio',{"id":comercio.id}]);
+    this.router.navigate(['/details-comercio',{
+      "id":comercio.id,
+      cerrado:cerrado
+    }]);
   }
 
   async presentAlert(message) {

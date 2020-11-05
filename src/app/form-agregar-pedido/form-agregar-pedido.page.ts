@@ -23,6 +23,8 @@ export class FormAgregarPedidoPage implements OnInit {
   public comentario:string = "";
   public cantidad:number = 1;
 
+  public precioMostrar = 0;
+
   constructor(
     public modalController: ModalController,
     public toastController: ToastController,
@@ -46,11 +48,25 @@ export class FormAgregarPedidoPage implements OnInit {
       var comercio:any = snap.payload.data();
       this.comercio = comercio;
       this.comercio.id = snap.payload.id;
-
+      
       var prodSubs = this.productosServices.get(this.route.snapshot.params.productoId).subscribe(snap=>{
         var producto:any = snap.payload.data();
-        this.producto = producto;
+        this.producto.asignarValores(producto);
+        
         this.producto.id = snap.payload.id;
+        this.producto.cantidad = 1;
+        //this.producto.precioTotal = this.producto.precio;
+
+        this.addToTotal(0,this.producto.precio,10);
+
+        
+
+        this.producto.gruposOpciones.forEach(grupo=>{
+          grupo.opciones.forEach(opcion =>{
+            opcion.cantidad = 0;
+          })
+        })
+
         prodSubs.unsubscribe();
       })
       comSubs.unsubscribe();
@@ -63,8 +79,10 @@ export class FormAgregarPedidoPage implements OnInit {
     console.log("seleccionada");
     grupo.opciones.forEach(opcion => {
       opcion.seleccionada = false;
+      opcion.cantidad = 0;
     });
     opcion.seleccionada = true;
+    opcion.cantidad = 1;
   }
 
   seleccionarOpcionCheck(grupo:GrupoOpciones, opcion:Opcion){
@@ -82,7 +100,7 @@ export class FormAgregarPedidoPage implements OnInit {
 
   agregar(){
     //Aca llama al servicio global de pedido y le carga el pedido
-    if(!this.cantidad){
+    if(!this.producto.cantidad){
       this.toastService.alert("Por favor ingrese la cantidad","Debe ser al menos 1");
       return;
     }
@@ -94,9 +112,9 @@ export class FormAgregarPedidoPage implements OnInit {
       console.log("validando")
       for (var i = 0; i < this.producto.gruposOpciones.length; ++i){
         let grupo = this.producto.gruposOpciones[i]
-  
-        
+                
         if(grupo.minimo > 0){
+
           if(grupo.maximo == 1){
             grupo.opciones.forEach(opcion =>{
               if(opcion.seleccionada)
@@ -108,8 +126,8 @@ export class FormAgregarPedidoPage implements OnInit {
             var cantidad = 0;
             console.log(grupo)
             grupo.opciones.forEach(opcion =>{
-              if(opcion.seleccionada)
-                cantidad++
+              if(opcion.cantidad)
+                cantidad += opcion.cantidad;
             })
             console.log(cantidad)
             if(cantidad >= grupo.minimo){
@@ -140,11 +158,10 @@ export class FormAgregarPedidoPage implements OnInit {
    
     console.log("!!!!!! isOK"+isOk)
     if(isOk){
-      this.producto.cantidad = this.cantidad;
       this.producto.comentario = this.comentario;
       this.pedidoActualService.addProduct(this.comercio,this.producto);
   
-      this.toastService.mensajeVerde('Agregado!', this.cantidad+' de '+this.producto.nombre);
+      this.toastService.mensajeVerde('Agregado!', this.producto.cantidad+' de '+this.producto.nombre);
       this.navCtrl.back();
     }
 
@@ -152,17 +169,130 @@ export class FormAgregarPedidoPage implements OnInit {
   }
 
   sumarCantidad(){
-    this.cantidad +=1;
+    this.producto.cantidad +=1;
+    let precioViejo = this.producto.precioTotal;
+    this.producto.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.producto.precioTotal,10);
   }
 
-  restarCantidad(){
-    this.cantidad-=1;
-    if(this.cantidad < 0){
-      this.cantidad = 0;
+  restarCantidad(){ 
+    this.producto.cantidad-=1;
+    if(this.producto.cantidad < 1){
+      this.producto.cantidad = 1;
+      return;
+    }   
+    
+    let precioViejo = this.producto.precioTotal;
+        this.producto.precioTotal = this.valorTotal();
+        this.addToTotal(precioViejo,this.producto.precioTotal,10);
+  }
+
+  valorTotal(){
+    let valorUno = this.producto.precio;
+    this.producto.gruposOpciones.forEach(grupos =>{
+      grupos.opciones.forEach (opcion =>{
+        if(opcion.seleccionada || opcion.cantidad > 0)
+          valorUno += opcion.precioVariacion * opcion.cantidad;
+      })
+    });
+    console.log(this.producto.cantidad+" "+valorUno)
+    return this.producto.cantidad * valorUno;
+  }
+
+  restarCantidadOpcion(grupoIndex,i){
+    if(!this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad){
+      this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad = 0;
     }
-  }
- 
 
+    if(!this.producto.gruposOpciones[grupoIndex].cantidadTotal){
+      this.producto.gruposOpciones[grupoIndex].cantidadTotal = 0;
+    }   
+
+    if(this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad <= 0){
+      this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad = 0;
+    }
+    else{
+      
+      this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad -=1;
+      this.producto.gruposOpciones[grupoIndex].cantidadTotal -=1;      
+    }
+
+    if(this.producto.gruposOpciones[grupoIndex].cantidadTotal < 0){
+      this.producto.gruposOpciones[grupoIndex].cantidadTotal = 0;
+    }
+
+    if(this.producto.gruposOpciones[grupoIndex].cantidadTotal >= this.producto.gruposOpciones[grupoIndex].maximo){
+      this.producto.gruposOpciones[grupoIndex].cantidadHabilitada = true;
+    }
+    else{
+      this.producto.gruposOpciones[grupoIndex].cantidadHabilitada = false;
+    }    
+
+    let precioViejo = this.producto.precioTotal;
+    this.producto.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+    
+
+   
+  }
+
+  sumarCantidadOpcion(grupoIndex,i){
+
+    if(!this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad){
+      this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad = 0;
+    }
+
+    if(!this.producto.gruposOpciones[grupoIndex].cantidadTotal){
+      this.producto.gruposOpciones[grupoIndex].cantidadTotal = 0;
+    }      
+
+    this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad +=1;
+    this.producto.gruposOpciones[grupoIndex].cantidadTotal +=1;
+
+    if(this.producto.gruposOpciones[grupoIndex].cantidadTotal >= this.producto.gruposOpciones[grupoIndex].maximo){
+      this.producto.gruposOpciones[grupoIndex].cantidadHabilitada = true;
+    }
+    else{
+      this.producto.gruposOpciones[grupoIndex].cantidadHabilitada = false;
+    }
+
+    if(this.producto.gruposOpciones[grupoIndex].opciones[i].precioVariacion){
+        
+    }
+
+    let precioViejo = this.producto.precioTotal;
+    this.producto.precioTotal = this.valorTotal();
+    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+
+    console.log(this.producto.gruposOpciones[grupoIndex].maximo)
+    console.log(this.producto.gruposOpciones[grupoIndex].cantidadTotal)
+    console.log(this.producto.gruposOpciones[grupoIndex].opciones[i].cantidad)
+  }
+
+
+  addToTotal(start, end, duration) {
+
+    this.producto.precioTotal = end;
+    this.precioMostrar = end;
+    /*if(start == end){
+      return;
+    }
+
+    var range = end - start;
+    var current = start;
+    var increment = end > start? 1 : -1;
+    var stepTime = Math.abs(Math.floor(duration / range));
+    var timer = setInterval(() => {
+        current += increment;
+        this.precioMostrar = current;
+
+        if (current == end) {
+            clearInterval(timer);
+        }
+      1 }, stepTime);*/
+  }
+
+ 
 
 }
 

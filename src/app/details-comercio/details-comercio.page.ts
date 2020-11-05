@@ -17,6 +17,7 @@ import { NotificacionesDesktopService } from '../services/notificaciones-desktop
 import { Producto } from '../Models/producto';
 import { NotificacionesService } from '../services/notificaciones.service';
 import { MesasService } from '../services/mesas.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-details-comercio',
@@ -37,7 +38,9 @@ export class DetailsComercioPage implements OnInit {
   productoSubscription:Subscription;
   comercioSubs:Subscription;
   productoDestacadoSubscription:Subscription;
+  catSub:Subscription;
   palabraFiltro = "";
+  public actualmenteCerrado = "false";
  
   slideOpts = {
     slidesPerView: 3,
@@ -64,14 +67,14 @@ export class DetailsComercioPage implements OnInit {
     private _dataServices:DataService,
     private alertController:AlertController,
     private notificacionesService:NotificacionesService,
-    private mesasService:MesasService
+    private mesasService:MesasService,
+    private toastService:ToastService
   ) { 
     this.comercio = new Comercio();
     this.palabraFiltro ="";
   }
 
-  ngOnInit() {  
-    
+  ngOnInit() {     
   
     
     if(this.route.snapshot.params.enLocal){
@@ -93,15 +96,16 @@ export class DetailsComercioPage implements OnInit {
       this.comercioUnico = localStorage.getItem('comercioUnico');
       if(this.route.snapshot.params.id)
         localStorage.setItem('comercioUnicoId',this.route.snapshot.params.id)
-    }
-  
-
-    
+    }    
 
     console.log(this.route.snapshot.params.mesaId);
     console.log(this.route.snapshot.params.comercioUnico);  
     console.log(this.route.snapshot.params.id);
     console.log(this.route.snapshot.params.mesaId);
+
+    this.actualmenteCerrado = this.route.snapshot.params.cerrado;
+
+    console.log('Cerrado:',this.actualmenteCerrado);
 
     this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
@@ -111,7 +115,7 @@ export class DetailsComercioPage implements OnInit {
        this.comercio = data.payload.data();
        this.comercio.id = this.route.snapshot.params.id;
 
-
+       console.log(this.comercio);
        if(this.route.snapshot.params.enLocal){
         console.log("Pedido en local")
         if(this.route.snapshot.params.mesaId){
@@ -127,8 +131,9 @@ export class DetailsComercioPage implements OnInit {
        }
 
 
-       var catSub = this.categoriasService.getAll(this.comercio.id).subscribe(snapshot =>{
+       this.catSub = this.categoriasService.getAll(this.comercio.id).subscribe(snapshot =>{
         this.categorias = [];
+        console.log(snapshot)
         snapshot.forEach((snap: any) => {       
           var categoria = snap.payload.doc.data();
           categoria.id = snap.payload.doc.id; 
@@ -136,17 +141,19 @@ export class DetailsComercioPage implements OnInit {
           this.categorias.push(categoria);           
         });    
         console.log(this.categorias);
-        catSub.unsubscribe();
+       
       })
 
       this.productoSubscription = this._productsServices.getAll(this.comercio.id).subscribe((snapshot) => {
         this.productos = [];
         this.loadingService.dismissLoading();   
        
-        snapshot.forEach((snap: any) => {         
+        snapshot.forEach((snap: any) => {    
+               
           var producto = snap.payload.doc.data();
           producto.id = snap.payload.doc.id; 
-          this.productos.push(producto);            
+          if(producto.recibirPedidos)
+            this.productos.push(producto);          
           
         });    
         console.log(this.productos);         
@@ -216,17 +223,16 @@ export class DetailsComercioPage implements OnInit {
       }
       
         
-      if(producto.categorias.length > 0){
-        producto.categorias.forEach(categoria => {
-          retorno =  (categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-          if(retorno){
-            encontrado = true;
-
-          }
-            
-        });
-       
-      }
+      if(producto.categorias){
+        if(producto.categorias.length > 0){
+          producto.categorias.forEach(categoria => {
+            retorno =  (categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
+            if(retorno){
+              encontrado = true;  
+            }              
+          });         
+        }
+      }     
 
       if(encontrado){
         return true;
@@ -241,18 +247,26 @@ export class DetailsComercioPage implements OnInit {
     this.router.navigate(['/comercios']);
   }
 
-  presentModalAgregarPedido(p) {
-    
-
-    this.router.navigate(['/form-agregar-pedido',{
-      productoId:p.id,
-      comercioId:this.comercio.id
-    }]);
+  presentModalAgregarPedido(p) {  
+    console.log(this.actualmenteCerrado) 
+    if(this.actualmenteCerrado == "true"){
+      this.toastService.alert("","El comercio se encuentra cerrado, no puedes realizar ahora un pedido")
+    }
+    else{
+      this.router.navigate(['/form-agregar-pedido',{
+        productoId:p.id,
+        comercioId:this.comercio.id
+      }]);
+    }
   }
 
   async irCarrito() {
-    this.router.navigate(['/carrito']);
+    
+    
+      this.router.navigate(['/carrito']);    
+    
   }
+   
 
   async presentAlertPrompt() {
     const alert = await this.alertController.create({
@@ -291,7 +305,11 @@ export class DetailsComercioPage implements OnInit {
       this.comercioSubs.unsubscribe();
       this.productoSubscription.unsubscribe();
       this.productoDestacadoSubscription.unsubscribe();
+      this.catSub.unsubscribe();
   }
+
+
+  
 
   
 

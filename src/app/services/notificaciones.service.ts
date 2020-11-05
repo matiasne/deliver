@@ -92,14 +92,14 @@ export class NotificacionesService {
           console.log(data);
         });
 
-        let notificacion = new Notificacion();
+        /*let notificacion = new Notificacion();
         notificacion.userId = usuario.id;
         notificacion.titulo = titulo;
         notificacion.mensaje = mensaje;
         notificacion.tipo = "simple";
         notificacion.estado = "enviada";
 
-        this.notificacionesAppService.create(notificacion);
+        this.notificacionesAppService.create(notificacion);*/
       
     })
   }

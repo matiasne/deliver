@@ -10,6 +10,9 @@ export class GrupoOpciones{
     public maximo=0;
     public opciones:Opcion[];
 
+    public cantidadTotal = 0;
+    public cantidadHabilitada = true;
+
     public seleccionadas:Opcion[];
 
 	constructor(){

@@ -4,6 +4,7 @@ export class Opcion{
     precioVariacion=0;  
     habilitado=true;    
     seleccionada = false;  
+    cantidad = 0;
   
 	constructor(){
         

@@ -2,6 +2,7 @@
     width: 100%;
     max-width: 400px;
     max-height: 200px;
+    border-radius: 10px;
 }
 
 ion-slide{
@@ -36,4 +37,9 @@ ion-avatar img{
 
 .icon-producto{
     font-size: 43px;
+}
+
+.demora{
+    padding: 10px;
+    font-size: 12px;
 }

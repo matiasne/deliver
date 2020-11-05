@@ -74,7 +74,7 @@ const routes: Routes = [
   {
     path: 'details-preguntas-frecuentes',
     loadChildren: () => import('./details-preguntas-frecuentes/details-preguntas-frecuentes.module').then( m => m.DetailsPreguntasFrecuentesPageModule)
-  }
+  },
 ];
 
 @NgModule({

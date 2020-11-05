@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NotificacionesDesktopService } from './services/notificaciones-desktop.service';
+import { ToastService } from './services/toast.service';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class AppComponent  {
     private fcm: FCM,
     private geolocation:Geolocation,
     private route: ActivatedRoute,
-    private notifiacionesDesktopService:NotificacionesDesktopService
+    private notifiacionesDesktopService:NotificacionesDesktopService,
+    private toastService:ToastService
   ) {
     this.initializeApp();
   }
@@ -43,7 +45,6 @@ export class AppComponent  {
 }
 
   initializeApp() {
-
     console.log("NgOnInit")
     this.notifiacionesDesktopService.init().then(data=>{
       console.log("OK")
@@ -54,8 +55,7 @@ export class AppComponent  {
     this.platform.ready().then(() => {
 
       //Esto es para web desktop
-      this.notifiacionesDesktopService.requestPermission();
-     
+      this.notifiacionesDesktopService.requestPermission();     
 
       this.geolocation.getCurrentPosition().then((resp) => { 
         this.auth.updateGPSUSer(resp.coords.latitude,resp.coords.longitude);
@@ -74,6 +74,7 @@ export class AppComponent  {
           this.isLoggedIn = true;     
 
           if (this.platform.is('cordova')) {
+            
             this.fcm.subscribeToTopic('marketing');
         
             this.fcm.getToken().then(token => {  
@@ -92,9 +93,12 @@ export class AppComponent  {
         
             this.fcm.onNotification().subscribe(data => {
               if(data.wasTapped){
-              //  alert("Received in background");
+                this.toastService.mensaje(data.title,data.body);
+                console.log(data.body);
+                //this.toastService.mensaje("")
               } else {
-              //  alert("Received in foreground");
+                console.log(data);
+                this.toastService.mensaje(data.title,data.body);
               };
             });
           }
@@ -107,16 +111,7 @@ export class AppComponent  {
     });
   }
 
-  async presentAlert(message) {
-
-    const alert = await this.alertController.create({
-      header: 'Gracias!!',
-      message: message,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
+  
 
   logout(){
     this.auth.logout();

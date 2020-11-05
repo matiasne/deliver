@@ -22,27 +22,30 @@
       <h5>Comercios</h5>
     </ion-list-header>  
     <ion-item  class="item-comercio" *ngFor="let comercio of comerciosFiltrados" (click)="showComercio(comercio)">
-      <ion-avatar slot="start" class="icono-comercio">
-        <img src="{{comercio.icono}}" *ngIf="comercio.icono">
-      </ion-avatar>      
+      <ion-avatar *ngIf="comercio.icono" slot="start" class="icono-comercio">
+        <img src="{{comercio.icono}}">
+      </ion-avatar>    
+      <ion-avatar *ngIf="!comercio.icono" slot="start" class="icono-comercio">
+        <img src="../../assets/icons/producto.png">
+      </ion-avatar>   
       <ion-label>
         <h2><b>{{comercio.nombre}}</b></h2>
         <p>
-          <app-calificacion-estrellas
-          [calificacion] = "comercio.promedioGeneral"
-          >
+          <app-calificacion-estrellas [calificacion] = "comercio.promedioGeneral">
           </app-calificacion-estrellas>
-        </p>
-        
+        </p>       
                 
-        <p *ngIf="comercio.distancia">
+        <!--p *ngIf="comercio.distancia">
           a {{comercio.distancia}} aprox.
-        </p>
+        </p-->
         <p *ngIf="comercio.estadoHorario == 'Cerrado'" style="color:rgb(207, 61, 61)">
           {{comercio.proximaApertura}}       
         </p>
         <p *ngIf="comercio.estadoHorario == 'Abierto'" style="color:rgb(61, 207, 68)">
           {{comercio.estadoHorario}}          
+        </p>
+        <p *ngIf="comercio.promedioGeneralDemora">
+          Demora estimada: {{comercio.promedioGeneralDemora | number:'1.0-0'}} minutos
         </p>
       </ion-label>         
     </ion-item>    
