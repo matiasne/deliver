@@ -1,37 +1,32 @@
   <ion-text color="primary">
-    <h4>Nombre y Apellido</h4>
   </ion-text>  
   <ion-item>
-    <ion-input name="nombre" type="text" [(ngModel)]="user.displayName" (change)='onChange()'></ion-input>
+    <ion-input name="nombre" type="text" placeholder="Nombre y Apellido" [(ngModel)]="user.displayName" (change)='onChange()'></ion-input>
   </ion-item>
 
   
   <ion-text color="primary">
-    <h4>Teléfono</h4>
   </ion-text>  
   <ion-item>
-    <ion-input name="telefono" type="number"  [(ngModel)]="user.telefono" (change)='onChange()'></ion-input>
+    <ion-input name="telefono" type="number" placeholder="Teléfono" [(ngModel)]="user.telefono" (change)='onChange()'></ion-input>
   </ion-item>
   
   <ion-text color="primary">
-    <h4>Dirección</h4>
   </ion-text>
   <ion-item>
-    <ion-input id="pac-input" [(ngModel)]="user.direccion"  type="text" (change)='onChange()' ></ion-input>
+    <ion-input id="pac-input" [(ngModel)]="user.direccion"  type="text" placeholder="Dirección" (change)='onChange()' ></ion-input>
   </ion-item>
   
     
   <ion-row>
     <ion-col >
-      <h4 color="primary">Piso</h4>
       <ion-item>
-        <ion-input name="piso" type="text" [(ngModel)]="user.address.piso" required [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input name="piso" type="text" placeholder="Piso" [(ngModel)]="user.address.piso" required [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
     </ion-col>
     <ion-col>
-      <h4 color="primary">Puerta</h4>
       <ion-item>
-        <ion-input name="puerta" type="text" [(ngModel)]="user.address.puerta" required [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input name="puerta" type="text" placeholder="Puerta" [(ngModel)]="user.address.puerta" required [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
     </ion-col>
   </ion-row>  
