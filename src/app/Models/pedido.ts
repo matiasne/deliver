@@ -98,6 +98,7 @@ export class Pedido{
                 if(orden.comercioId == comercio.id){               
                  
                     let objCopy = Object.assign({}, producto);
+                    delete objCopy.foto;
                     orden.productos.push(objCopy);                    
                     agregado = true;
                 }

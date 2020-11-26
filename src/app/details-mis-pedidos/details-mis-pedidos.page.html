@@ -4,7 +4,7 @@
 
 <ion-content style="margin-top: 50px;"> 
   
-  <ion-car *ngIf="sinPedidos">
+  <ion-card *ngIf="sinPedidos">
     <ion-card-header>
 
     </ion-card-header>
@@ -16,7 +16,7 @@
         Todavía no has hecho pedidos. Busca en todas nuestras opciones y anímate a hacer tu primer pedido!
       </ion-list-header> 
     </ion-card-content>
-  </ion-car>
+  </ion-card>
   <ion-card *ngFor="let pedido of pedidosCliente"> 
    
       <ion-card-header>

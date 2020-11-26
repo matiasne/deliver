@@ -106,7 +106,7 @@ export class HomePage  {
       });
       console.log(this.comercios);  
       //this.hideLoading();    
-     // this.comerciosSubscription.unsubscribe();
+      this.comerciosSubscription.unsubscribe();
     });    
   }
 
@@ -258,7 +258,10 @@ export class HomePage  {
   showComercios(filtro){
     this.router.navigate(['/list-comercios',{filtro:filtro}]);
   }
- 
+
+  showComerciosSearch(){
+    this.router.navigate(['/list-comercios',{filtro:this.filtro}]);
+  } 
 
   ionViewDidLeave(){
       this.subscription.unsubscribe();

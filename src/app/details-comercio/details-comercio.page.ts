@@ -71,37 +71,13 @@ export class DetailsComercioPage implements OnInit {
     private toastService:ToastService
   ) { 
     this.comercio = new Comercio();
+    this.ultimoProducto = new Producto();
     this.palabraFiltro ="";
   }
 
   ngOnInit() {     
   
     
-    if(this.route.snapshot.params.enLocal){
-      localStorage.setItem('enLocal',"true");
-    }
-    else{
-      localStorage.setItem('enLocal',"false");
-    }
-
-    if(this.route.snapshot.params.porWhatsapp){
-      localStorage.setItem('porWhatsapp',"true");
-    }
-    else{
-      localStorage.setItem('porWhatsapp',"false");
-    }
-   
-    if(this.route.snapshot.params.comercioUnico){
-      localStorage.setItem('comercioUnico',"true");
-      this.comercioUnico = localStorage.getItem('comercioUnico');
-      if(this.route.snapshot.params.id)
-        localStorage.setItem('comercioUnicoId',this.route.snapshot.params.id)
-    }    
-
-    console.log(this.route.snapshot.params.mesaId);
-    console.log(this.route.snapshot.params.comercioUnico);  
-    console.log(this.route.snapshot.params.id);
-    console.log(this.route.snapshot.params.mesaId);
 
     this.actualmenteCerrado = this.route.snapshot.params.cerrado;
 
@@ -110,25 +86,13 @@ export class DetailsComercioPage implements OnInit {
     this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
     })
+
     this.loadingService.presentLoading();   
     this.comercioSubs =  this.comercioService.getCommerce(this.route.snapshot.params.id).subscribe((data:any) => {
        this.comercio = data.payload.data();
        this.comercio.id = this.route.snapshot.params.id;
 
-       console.log(this.comercio);
-       if(this.route.snapshot.params.enLocal){
-        console.log("Pedido en local")
-        if(this.route.snapshot.params.mesaId){
-          this.mesasService.get(this.comercio.id,this.route.snapshot.params.mesaId).subscribe(snap=>{
-            
-            let mesa:any = snap.payload.data();
-            console.log(mesa)
-            mesa.rolEncargados.forEach(encargadoRolId => {
-              this.notificacionesService.enviarByRolId(encargadoRolId,"La mesa :"+mesa.nombre+" ha solicitado la carta","")
-            });         
-          })
-        }
-       }
+      
 
 
        this.catSub = this.categoriasService.getAll(this.comercio.id).subscribe(snapshot =>{
@@ -144,21 +108,7 @@ export class DetailsComercioPage implements OnInit {
        
       })
 
-      this.productoSubscription = this._productsServices.getAll(this.comercio.id).subscribe((snapshot) => {
-        this.productos = [];
-        this.loadingService.dismissLoading();   
-       
-        snapshot.forEach((snap: any) => {    
-               
-          var producto = snap.payload.doc.data();
-          producto.id = snap.payload.doc.id; 
-          if(producto.recibirPedidos)
-            this.productos.push(producto);          
-          
-        });    
-        console.log(this.productos);         
-        this.filtrarProductos();
-      });
+      
 
       this.productoDestacadoSubscription = this._productsServices.getDestacados(this.comercio.id).subscribe(snapshot=>{
         snapshot.forEach((snap: any) => {       
@@ -171,6 +121,64 @@ export class DetailsComercioPage implements OnInit {
 
     });  
 
+    this.ultimoProducto  =new Producto();
+    this.productos = [];
+    this.verMas();
+
+  }
+
+
+  ionViewDidEnter(){    
+    if(this.route.snapshot.params.filtro)
+      this.palabraFiltro = this.route.snapshot.params.filtro.toLowerCase();   
+  }
+
+  onChange(event){
+    this.palabraFiltro = event.target.value.toLowerCase();
+    this.ultimoProducto = new Producto();
+    this.productos = [];
+    this.verMas();
+  }
+
+  doRefresh(event){
+    this.palabraFiltro = "";
+    this.ultimoProducto = new Producto();
+    this.productos = [];
+    this.verMas();
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
+  }
+
+  verMas(){
+    let limit = 7;
+    var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+    this.loadingService.presentLoading();
+    this.productoSubscription = this._productsServices.search(limit,this.route.snapshot.params.id,palabra,this.ultimoProducto.nombre).subscribe((snapshot) => {
+     
+      this.loadingService.dismissLoading();      
+      snapshot.forEach((snap: any) => {                     
+        var producto = snap.payload.doc.data();
+          producto.id = snap.payload.doc.id;     
+
+        this.productos.push(producto);         
+      });  
+
+      console.log(this.productos)
+      this.ultimoProducto = this.productos[this.productos.length-1];
+      
+      this.infiniteScroll.complete();
+      this.infiniteScroll.disabled = false;
+
+      if (this.productos.length < limit) {
+        this.infiniteScroll.disabled = true;
+      }      
+      console.log(this.productos);         
+      //this.productoSubscription.unsubscribe();
+    });
+
+    
   }
 
  
@@ -196,7 +204,9 @@ export class DetailsComercioPage implements OnInit {
       this.verDestacados = "false";
     }
 
-    this.filtrarProductos();
+    this.ultimoProducto = new Producto();
+    this.productos = [];
+    this.verMas();
   }
 
   verProductosDestacados(){
@@ -205,42 +215,7 @@ export class DetailsComercioPage implements OnInit {
   }
 
   
-  filtrarProductos() {
-
-    console.log(this.palabraFiltro)
-    //this.productosFiltrados = [];
-    this.productosFiltrados = this.productos.filter(producto => {   
-      
-      var retorno = false;
-
-      var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      var encontrado = false;
-      console.log(palabra)
-      if(producto.nombre){
-        retorno =  (producto.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-        if(retorno)
-          encontrado = true;
-      }
-      
-        
-      if(producto.categorias){
-        if(producto.categorias.length > 0){
-          producto.categorias.forEach(categoria => {
-            retorno =  (categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-            if(retorno){
-              encontrado = true;  
-            }              
-          });         
-        }
-      }     
-
-      if(encontrado){
-        return true;
-      }
-    });
-  }
-
-
+ 
   
 
   showComercios(){
@@ -271,7 +246,7 @@ export class DetailsComercioPage implements OnInit {
   async presentAlertPrompt() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Que deseas buscar?',
+      header: 'Que quieres pedir?',
       inputs: [
         {
           name: 'palabra',
@@ -291,8 +266,10 @@ export class DetailsComercioPage implements OnInit {
           text: 'Buscar',
           handler: (data) => {
             console.log('Confirm Ok');
-            this.palabraFiltro = data.palabra;
-            this.filtrarProductos();
+            this.palabraFiltro = data.palabra.toLowerCase();
+            this.ultimoProducto = new Producto();
+            this.productos = [];
+            this.verMas();
           }
         }
       ]

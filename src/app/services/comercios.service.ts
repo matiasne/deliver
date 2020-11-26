@@ -54,8 +54,7 @@ export class ComerciosService {
 
 
   async buscarPorDistancia(lat,lng,radio,palabra,ultimo){
-      const geo = geofirex.init(firebase);   
-
+      const geo = geofirex.init(firebase);
       const center = geo.point(lat, lng);
       const radius = radio;
       const field = 'posicion';
@@ -65,18 +64,27 @@ export class ComerciosService {
       
   }
 
-  
+  public start(palabra){
+    return this.firestore.collection(this.collection, ref => 
+      ref.where('keywords','array-contains',palabra).orderBy('nombre')
+          .limit(10)).snapshotChanges();
+  }
 
   
-  public search(posicionActual,palabra,ultimo){  
+  public search(limit,palabra,ultimo){  
+    
+    console.log("palabra: "+palabra)
+    console.log("ultimo: "+ultimo)
+    console.log("limit: "+limit)
     
     if(ultimo == ""){
-      console.log("!!!!!! primero")     
+      console.log("!!!!!! primero")  
       return this.firestore.collection(this.collection, ref => 
         ref.where('keywords','array-contains',palabra)
             .where('recibirPedidos','==',true)
             .orderBy('nombre')
-            .limit(5)).snapshotChanges();
+            .startAfter(ultimo)
+            .limit(limit)).snapshotChanges();
     }
     else{
       return this.firestore.collection(this.collection, ref => 
@@ -84,7 +92,7 @@ export class ComerciosService {
             .where('recibirPedidos','==',true)
             .orderBy('nombre')
             .startAfter(ultimo)
-            .limit(5)).snapshotChanges();    
+            .limit(limit)).snapshotChanges();    
     }    
   }  
 

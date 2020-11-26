@@ -4,24 +4,19 @@
 
 <ion-content style="margin-top: 50px;">  
   
-    <ion-row>
-      <ion-col size="10">
-        <ion-input placeholder="Busca tu comercio favorito" style="border:1px solid rgb(206, 206, 206); border-radius: 5px;"
-        [(ngModel)]="palabraFiltro"
-        ></ion-input>
-      </ion-col>
-      <ion-col size="2">
-        <ion-button color="primary" style="margin-top: -1px; height: 42px;"  (click)="filtrarComercios()">
-            <ion-icon name="search"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <ion-button color="primary"  expand="full" size="large" (click)="presentAlertPrompt()">
+    <ion-icon name="search"></ion-icon>&nbsp; Buscar
+  </ion-button>
 
   <ion-list lines="none">     
     <ion-list-header>
       <h5>Comercios</h5>
     </ion-list-header>  
-    <ion-item  class="item-comercio" *ngFor="let comercio of comerciosFiltrados" (click)="showComercio(comercio)">
+    <ion-item  class="item-comercio" *ngFor="let comercio of comercios" (click)="showComercio(comercio)">
       <ion-avatar *ngIf="comercio.icono" slot="start" class="icono-comercio">
         <img src="{{comercio.icono}}">
       </ion-avatar>    
@@ -50,9 +45,12 @@
       </ion-label>         
     </ion-item>    
   </ion-list>
-  <div class="space">
-    
-  </div> 
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más trabajos...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
   
   
 </ion-content>

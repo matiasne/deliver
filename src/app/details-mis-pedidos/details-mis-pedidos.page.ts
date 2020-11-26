@@ -58,15 +58,18 @@ export class DetailsMisPedidosPage implements OnInit {
           this.pedidosCliente.push(pedido); 
         }
           
-          
-        let timeNow = new Date().getTime();
-        pedido.faltanMinutos = Math.ceil((pedido.demora - timeNow) / 60000);
-        console.log(pedido.demora+" "+timeNow)
-        console.log(pedido.faltanMinutos)       
-        
-        if(pedido.faltanMinutos < 0){
-          pedido.faltanMinutos = 0;
-        } 
+        let timeDemora = (pedido.demora*60) + pedido.createdAt.seconds;
+              let timeNow = new Date().getTime()/1000;
+
+              console.log(timeDemora+" "+timeNow)
+              pedido.faltanMinutos = Math.ceil((timeDemora - timeNow)/60);
+             
+              console.log(pedido.faltanMinutos)
+              
+              
+              if(pedido.faltanMinutos < 0){
+                pedido.faltanMinutos = 0;
+              }
       });
       console.log(this.pedidosCliente.length)
     });
@@ -111,9 +114,12 @@ export class DetailsMisPedidosPage implements OnInit {
                
               }
 
-              let timeNow = new Date().getTime();
-              pedido.faltanMinutos = Math.ceil((pedido.demora - timeNow) / 60000);
-              console.log(pedido.demora+" "+timeNow)
+              let timeDemora = (pedido.demora*60) + pedido.createdAt.seconds;
+              let timeNow = new Date().getTime()/1000;
+
+              console.log(timeDemora+" "+timeNow)
+              pedido.faltanMinutos = Math.ceil((timeDemora - timeNow)/60);
+             
               console.log(pedido.faltanMinutos)
               
               
@@ -133,8 +139,7 @@ export class DetailsMisPedidosPage implements OnInit {
   }
 
   toDateTime(date) {
-    var t = new Date(1970, 0, 1,0,0,0,0); // Epoch
-    
+    var t = new Date(1970, 0, 1,0,0,0,0); // Epoch    
     t.setDate(date);
     console.log(date)
     console.log(t)

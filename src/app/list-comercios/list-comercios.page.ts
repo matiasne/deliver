@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController, LoadingController, AlertController } from '@ionic/angular';
+import { ModalController, LoadingController, AlertController, IonInfiniteScroll } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { CategoriasService } from '../services/categorias.service';
 import { ComerciosService } from '../services/comercios.service';
@@ -8,12 +8,11 @@ import { PedidoService } from '../services/global/pedido.service';
 import { Pedido } from '../Models/pedido';
 import { Subscription } from 'rxjs';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { CarritoPage } from '../carrito/carrito.page';
 import * as firebase from 'firebase/app';
 import * as geofirex from 'geofirex';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { get } from 'geofirex';
 import { LoadingService } from '../services/loading.service';
+import { Comercio } from '../Models/comercio';
 
 @Component({
   selector: 'app-list-comercios',
@@ -22,6 +21,7 @@ import { LoadingService } from '../services/loading.service';
 })
 export class ListComerciosPage implements OnInit {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   
   comercios:any = [];
   public comerciosSubscription: Subscription;
@@ -30,7 +30,7 @@ export class ListComerciosPage implements OnInit {
 
   public pedidoActual:Pedido;
   public loadingActive = false;
-  public ultimoComercio = "";
+  public ultimoComercio:Comercio;
 
   public comerciosFiltrados = [];
   
@@ -38,7 +38,6 @@ export class ListComerciosPage implements OnInit {
     public modalController: ModalController,
     private auth:AuthService,
     private router: Router,
-    private _categoriesService:CategoriasService,
     private _comerciosService:ComerciosService,    
     private pedidoService:PedidoService,
     public loadingController: LoadingController,
@@ -49,10 +48,7 @@ export class ListComerciosPage implements OnInit {
     private loadingService:LoadingService
   ) {
 
-    console.log(this.route.snapshot.params.filtro);
-
-    if(this.route.snapshot.params.filtro)
-      this.palabraFiltro = this.route.snapshot.params.filtro;
+   
 
     this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
@@ -61,14 +57,99 @@ export class ListComerciosPage implements OnInit {
     
   }
 
-  ngOnInit(){
-    this.ultimoComercio = "";
+  ngOnInit() {   
+    if(this.route.snapshot.params.filtro)
+      this.palabraFiltro = this.route.snapshot.params.filtro; 
+    this.ultimoComercio  =new Comercio();
     
+    this.loadingService.presentLoading();   
+    this.comercios = [];
+    
+   this.comerciosSubscription = this._comerciosService.start(this.palabraFiltro).subscribe((snapshot) => {
+     
+      this.loadingService.dismissLoading();
+      this.comercios = [];
+      snapshot.forEach((snap: any) => {      
+                
+        var comercio = snap.payload.doc.data();
+        comercio.id = snap.payload.doc.id; 
 
-    this.buscarComercio();
+        console.log(comercio)
+        this.setearAbiertoCerrado(comercio);
+        let gps =  JSON.parse(this.auth.getGPSUser());        
+        if(gps)
+          this.setDistancia(comercio,gps.lat,gps.lng);
+        this.comercios.push(comercio);
+        
+      });  
+
+      this.ultimoComercio = this.comercios[this.comercios.length-1];
+      
+      this.infiniteScroll.complete(); 
+      this.infiniteScroll.disabled = false;
+
+      if (this.comercios.length < 10) {
+        this.infiniteScroll.disabled = true;
+      }      
+      console.log(this.comercios);         
+      this.comerciosSubscription.unsubscribe();
+    });
+   
+
+
+    
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter(){ 
+    
+  }
+
+  ionViewDidLeave(){
+    this.comerciosSubscription.unsubscribe();
+  }
+
+  onChange(event){
+    this.palabraFiltro = event.target.value.toLowerCase();
+    this.ultimoComercio = new Comercio();
+    this.comercios = [];
+    this.verMas();
+  }
+
+
+  verMas(){
+    let limit = 10;
+    var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    this.loadingService.presentLoading();
+    this.comerciosSubscription = this._comerciosService.search(limit,palabra,this.ultimoComercio.nombre).subscribe((snapshot) => {
+     
+      this.loadingService.dismissLoading();
+     
+      snapshot.forEach((snap: any) => {      
+                
+        var comercio = snap.payload.doc.data();
+        comercio.id = snap.payload.doc.id; 
+
+        console.log(comercio)
+        this.setearAbiertoCerrado(comercio);
+        let gps =  JSON.parse(this.auth.getGPSUser());        
+        if(gps)
+          this.setDistancia(comercio,gps.lat,gps.lng);
+        this.comercios.push(comercio);
+        
+      });  
+
+      this.ultimoComercio = this.comercios[this.comercios.length-1];
+      
+      this.infiniteScroll.complete();
+      this.infiniteScroll.disabled = false;
+
+      if (this.comercios.length < limit) {
+        this.infiniteScroll.disabled = true;
+      }      
+      console.log(this.comercios);         
+     // this.comerciosSubscription.unsubscribe();
+    });
 
     
   }
@@ -181,82 +262,12 @@ export class ListComerciosPage implements OnInit {
   
   filtrarComercios() {
 
-    console.log(this.palabraFiltro)
-
-    if(this.palabraFiltro == ""){
-      this.comerciosFiltrados = this.comercios;
-    }
-    //this.productosFiltrados = [];
-    this.comerciosFiltrados = this.comercios.filter(comercio => {   
-      
-      var retorno = false;
-
-      var palabra = this.palabraFiltro.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      var encontrado = false;
-      console.log(palabra)
-      if(comercio.nombre){
-        retorno =  (comercio.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-        if(retorno)
-          encontrado = true;
-      }
-      
-      if(comercio.descripcion){
-        retorno =  (comercio.descripcion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(palabra.toLowerCase()) > -1);
-        if(retorno)
-          encontrado = true;
-      } 
-     
-
-      if(encontrado){
-        return true;
-      }
-    });
+    this.ultimoComercio = new Comercio();
+    this.comercios = [];
+    this.verMas();
   }
-
-  buscarComercio(){
-    this.comercios = [];  
-    this.ultimoComercio = "";  
-    //this.presentLoading();
-    console.log(this.palabraFiltro);
-       
-    console.log(this.palabraFiltro);
-    this.loadingService.presentLoading();
-
-    this._comerciosService.getAll().subscribe(snapshot =>{
-      
-      this.loadingService.dismissLoading();
-    //  this.hideLoading();
-      this.comercios = [];
-    
-      snapshot.forEach((snap: any) => {
-      
-          var comercio = snap.payload.doc.data();
-          comercio.id = snap.payload.doc.id; 
-          this.setearAbiertoCerrado(comercio);
-
-          let gps =  JSON.parse(this.auth.getGPSUser());
-          
-          if(gps)
-            this.setDistancia(comercio,gps.lat,gps.lng);
-
-          this.comercios.push(comercio);   
-        
-      });
-      console.log(this.comercios);
-
-      if(this.route.snapshot.params.filtro){
-        this.palabraFiltro = this.route.snapshot.params.filtro;
-        
-      }
-      this.filtrarComercios();
-
-    })
 
   
-
-
-    
-  }
 
   setDistancia(comercio,lat,lng){
     const geo = geofirex.init(firebase);
@@ -283,6 +294,40 @@ export class ListComerciosPage implements OnInit {
   
 
 
+  async presentAlertPrompt() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Donde quieres pedir?',
+      inputs: [
+        {
+          name: 'palabra',
+          type: 'text',
+          placeholder: ''
+        },        
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Buscar',
+          handler: (data) => {
+            console.log('Confirm Ok');
+            this.palabraFiltro = data.palabra.toLowerCase();
+            this.ultimoComercio = new Comercio();
+            this.comercios = [];
+            this.verMas();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
   
 
   async presentLoading() {
@@ -351,6 +396,15 @@ export class ListComerciosPage implements OnInit {
 
   async irCarrito() {
     this.router.navigate(['/carrito']);
+  }
+
+  doRefresh(event) {
+    this.ultimoComercio = new Comercio();
+    this.comercios = [];
+    this.verMas();
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
   }
 }
 		

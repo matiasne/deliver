@@ -5,6 +5,10 @@
 
 <ion-content class="ion-padding">
   
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
     <img class="portada-foto" src="{{comercio.portada}}" />
 
     <p>{{comercio.descripcion}}</p>
@@ -23,8 +27,6 @@
     </ion-slides>      
   
 
-
-    <div>  
      
       <ion-list lines="none">       
           <div class="demora" *ngIf="comercio.promedioGeneralDemora">
@@ -51,7 +53,7 @@
             </ion-item>
           </div>
           <div *ngIf="verNoDestacados == 'true'">
-            <ion-item  class="item-producto" *ngFor="let producto of productosFiltrados" (click)="presentModalAgregarPedido(producto)">
+            <ion-item  class="item-producto" *ngFor="let producto of productos" (click)="presentModalAgregarPedido(producto)">
               <ion-avatar slot="start">
                 <img src="{{producto.foto}}" *ngIf="producto.foto">
                 <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
@@ -62,10 +64,15 @@
               </ion-label> 
             </ion-item>  
           </div>              
-        </ion-list>       
-      </div> 
-  <div class="space">    
-  </div> 
+        </ion-list>  
+        <ion-infinite-scroll threshold="100px" (ionInfinite)="verMas()">
+          <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Cargando más trabajos...">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>     
+    
+  
   
 </ion-content>
 <ion-footer *ngIf="pedidoActual.on" class="ion-no-border ion-padding">

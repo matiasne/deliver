@@ -49,18 +49,22 @@
       
           <div *ngIf="grupo.maximo > 1">
             <p>Seleccione de {{grupo.minimo}} a {{grupo.maximo}} opciones</p>
-            <ion-item *ngFor="let opcion of grupo.opciones; let i = index">
-              <ion-label>
-                {{opcion.nombre}}
-                <span *ngIf="opcion.precioVariacion != 0">
-                  {{opcion.precioVariacion | currency}}  
-                </span>
-              </ion-label>
-              <ion-button class="btn-agregar-opcion" color="light" (click)="restarCantidadOpcion(grupoIndex,i)"><ion-icon name="remove"></ion-icon></ion-button>
-              &nbsp;&nbsp;{{opcion.cantidad}}&nbsp;&nbsp;
-              <ion-button class="btn-agregar-opcion" color="light" (click)="sumarCantidadOpcion(grupoIndex,i)" [disabled]="grupo.cantidadHabilitada"><ion-icon name="add"></ion-icon></ion-button>
-          
-            </ion-item>
+            
+            <span *ngFor="let opcion of grupo.opciones; let i = index">
+              <ion-item *ngIf="opcion.habilitado">
+                <ion-label>
+                  {{opcion.nombre}}
+                  <span *ngIf="opcion.precioVariacion != 0">
+                    {{opcion.precioVariacion | currency}}  
+                  </span>
+                </ion-label>
+                <ion-button class="btn-agregar-opcion" color="light" (click)="restarCantidadOpcion(grupoIndex,i)"><ion-icon name="remove"></ion-icon></ion-button>
+                &nbsp;&nbsp;{{opcion.cantidad}}&nbsp;&nbsp;
+                <ion-button class="btn-agregar-opcion" color="light" (click)="sumarCantidadOpcion(grupoIndex,i)" [disabled]="grupo.cantidadHabilitada"><ion-icon name="add"></ion-icon></ion-button>
+            
+              </ion-item>
+            </span>
+            
           </div>      
         </div>
 

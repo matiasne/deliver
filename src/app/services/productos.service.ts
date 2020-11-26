@@ -37,7 +37,7 @@ export class ProductosService {
   }
 
   
-  public search(commerce_id,palabra,ultimo){
+  public search(limit,commerce_id,palabra,ultimo){
     this.collection = 'comercios/'+commerce_id+'/productos';
     console.log(palabra)
     if(ultimo == ""){
@@ -46,7 +46,7 @@ export class ProductosService {
         ref.where('keywords','array-contains',palabra)
             .where('recibirPedidos','==',true)
             .orderBy('nombre')
-            .limit(5)).snapshotChanges();   
+            .limit(limit)).snapshotChanges();   
     }
     else{
       return this.firestore.collection(this.collection, ref => 
@@ -54,7 +54,7 @@ export class ProductosService {
             .where('recibirPedidos','==',true)
             .orderBy('nombre')
             .startAfter(ultimo)
-            .limit(5)).snapshotChanges();    
+            .limit(limit)).snapshotChanges();    
     }
   }  
 }
