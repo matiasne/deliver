@@ -64,7 +64,7 @@ export class FormDatosEnvioPage implements OnInit {
     }
   }
 
-actualizaron  setDistancia(posicionComercio,user){
+   setDistancia(posicionComercio,user){
     console.log(posicionComercio)
     console.log(user.posicion)
     const geo = geofirex.init(firebase);
