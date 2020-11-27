@@ -45,6 +45,7 @@ export class FormDatosEnvioPage implements OnInit {
       if(this.pedidoActual.ordenes.length > 1){
         this.calcularDistancia = false;
       }
+     //En caso de haber mas de una orden de diferentes comercios no calcula distancia de envio. 
      // if(this.pedidoActual.pedidos)
     });
 
