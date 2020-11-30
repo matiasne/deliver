@@ -189,7 +189,7 @@ export class DetailsMisPedidosPage implements OnInit {
 
     const alert = await this.alertController.create({
       header: 'Esta seguro?',
-      message: 'Está seguro que el pedido está entregado?',
+      message: 'Está seguro que el pedido está listo?',
       buttons: [
         {
           text: 'No',
