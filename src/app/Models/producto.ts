@@ -6,6 +6,7 @@ export class Producto{
     public nombre="";
     public stock=0;
     public precio=0;
+    public promocion=0;
     public code="";
     public provider_id=0;
     public category=0;
