@@ -38,6 +38,7 @@
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-googleplus": "^8.5.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
+    "cordova-res": "^0.15.2",
     "firebase": "^7.14.5",
     "geofirex": "^0.1.0",
     "phonegap-plugin-barcodescanner": "^8.1.0",
