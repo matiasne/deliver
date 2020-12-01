@@ -177,8 +177,30 @@ export class DetailsMisPedidosPage implements OnInit {
     this.router.navigate(['/form-calificacion',{comercioId:pedido.comercioId}]);
   }
 
-  buscado(pedido){
-    this.pedidoService.setPedidoBuscado(pedido);
+  async buscado(pedido){
+
+    const alert = await this.alertController.create({
+      header: 'Esta seguro?',
+      message: '¿Está seguro que fue entregado?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }, {
+          text: 'Si',
+          handler: () => { 
+            this.pedidoService.setPedidoBuscado(pedido);
+            
+          }
+        }
+      ]
+    });
+    await alert.present();
+
   }
 
   tomado(pedido){    
