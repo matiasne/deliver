@@ -58,8 +58,6 @@ export class FormDatosEnvioPage implements OnInit {
 
   setValue(newValue : any){    
     this.user.asignarValores(newValue);
-    console.log(this.user)
-    console.log(this.user.posicion); //Esta bien!!!
     if(this.calcularDistancia){
       this.setDistancia(this.pedidoActual.ordenes[0].comercioPosicion,this.user);
     }
@@ -67,10 +65,10 @@ export class FormDatosEnvioPage implements OnInit {
 
    setDistancia(posicionComercio,user){
     console.log(posicionComercio)
-    console.log(user.posicion)
+    console.log(user.posicion.geopoint.longitude)
     const geo = geofirex.init(firebase);
-    if(posicionComercio.geopoint.Latitude !=""){
-      this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.Latitude, user.posicion.geopoint.Longitude), geo.point(posicionComercio.geopoint.Latitude, posicionComercio.geopoint.Longitude)).toFixed(2))
+    if(posicionComercio.geopoint.Latitude !="" && user.posicion.geopoint.longitude){
+      this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.latitude, user.posicion.geopoint.longitude), geo.point(posicionComercio.geopoint.Latitude, posicionComercio.geopoint.Longitude)).toFixed(2))
       console.log("distancia: ")
       console.log(this.distancia);
       if(this.distancia > 0 && this.distancia <= 1.6) {
