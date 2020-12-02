@@ -27,22 +27,21 @@ export class FormDatosUsuarioComponent implements OnInit {
 
   public geocoder:any;  
 
-  public user:any;
+  public user:UserData;
 
   constructor(
     private authService:AuthService,
     private toastController:ToastController,
     private router:Router
   ) { 
+    this.user = new UserData();
     this.geo = geofirex.init(firebase);
   }
 
-  ngOnInit() {   
-       
+  ngOnInit() {         
       this.onSelectValue.emit(this.user);
-      this.user = JSON.parse(localStorage.getItem('user'));
-      console.log(this.user)
-    
+      this.user.asignarValores(JSON.parse(localStorage.getItem('user')));
+      console.log(this.user)    
       setTimeout(() => {           
         this.initAutocomplete('pac-input');     
       }, 3000);  
@@ -157,8 +156,8 @@ export class FormDatosUsuarioComponent implements OnInit {
       console.log(this.place);
 
       this.user.posicion = this.geo.point(this.place.geometry.location.lat(), this.place.geometry.location.lng());
-      this.user.posicion.geopoint.Latitude = this.place.geometry.location.lat();
-      this.user.posicion.geopoint.Longitude = this.place.geometry.location.lng();
+      this.user.posicion.geopoint.latitude = this.place.geometry.location.lat();
+      this.user.posicion.geopoint.longitude = this.place.geometry.location.lng();
 
       var marker = this.makeMarker({
         position: {lat: Number(this.place.geometry.location.lat()), lng: Number(this.place.geometry.location.lng())},
