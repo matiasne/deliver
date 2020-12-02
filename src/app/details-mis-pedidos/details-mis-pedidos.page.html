@@ -40,7 +40,7 @@
                   <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                 </div>
                 <h3>{{producto.comentario}}</h3>
-                <h3>Subtotal:{{producto.precioTotal * producto.cantidad | currency}}</h3>
+                <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
               </ion-label>          
             </ion-item>
           </ion-list>
@@ -87,7 +87,7 @@
                     <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                   </div>
                   <h3>{{producto.comentario}}</h3>
-                  <h3>Subtotal:{{producto.precioTotal * producto.cantidad | currency}}</h3>
+                  <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
                 </ion-label>          
               </ion-item>             
             </ion-list>
@@ -137,7 +137,7 @@
                     <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                   </div>
                   <h3>{{producto.comentario}}</h3>
-                  <h3>Subtotal:{{producto.precioTotal * producto.cantidad | currency}}</h3>       
+                  <h3>Subtotal:{{producto.precioTotal | currency}}</h3>       
                 </ion-label>          
               </ion-item>
               <ion-item>

@@ -60,7 +60,13 @@
               </ion-avatar>
               <ion-label>
                 <h2><b>{{producto.nombre}}</b></h2>
-                <p>{{producto.precio| currency}}</p>              
+               <span *ngIf= "producto.promocion">
+                  <p><span class="tachado">{{producto.precio| currency}} </span> <span class="naranja"> {{producto.promocion| currency}}</span></p>
+                </span>
+                <span *ngIf= "!producto.promocion">
+                  <p>{{producto.precio| currency}}</p>
+                </span>
+
               </ion-label> 
             </ion-item>  
           </div>              

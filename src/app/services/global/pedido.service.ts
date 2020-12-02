@@ -181,7 +181,7 @@ export class PedidoService {
 
   public setPedidoTomado(pedido,minutos){
     if(pedido.clienteId)
-      this.notificacionesService.enviarById(pedido.clienteId,"El pedido ha sido tomado!","Su comercio ya está realizando el pedido");
+      this.notificacionesService.enviarById(pedido.clienteId,"¡El pedido ha sido tomado!","¡Su comercio ya está realizando el pedido");
     
     this.comerciosService.addDemoraPromedio(pedido.comercioId,minutos)
     this.firestore.collection("pedidos").doc(pedido.id).update({estado: 1, demora: minutos});
@@ -190,7 +190,7 @@ export class PedidoService {
   public setPedidoListo(pedido){
 
     if(pedido.clienteId)
-      this.notificacionesService.enviarById(pedido.clienteId,"El pedido esta listo!","Su comercio ya tiene el pedido listo");
+      this.notificacionesService.enviarById(pedido.clienteId,"¡El pedido esta listo!","¡El comercio ya tiene tu pedido listo!");
 
     let sub = this.comerciosService.getCommerce(pedido.comercioId).subscribe(snap=>{
       var comercio:any = snap.payload.data();
@@ -200,7 +200,7 @@ export class PedidoService {
       console.log(comercio.rolComandatarios);
 
       comercio.rolCadetes.forEach(cadeteRolId => {
-        this.notificacionesService.enviarByRolId(cadeteRolId,"El pedido esta listo!","Tienes un pedido listo para buscar!");
+        this.notificacionesService.enviarByRolId(cadeteRolId,"¡El pedido esta listo!","¡Tienes un pedido listo para buscar!");
       });
       sub.unsubscribe();
     })

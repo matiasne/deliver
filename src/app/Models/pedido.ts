@@ -93,13 +93,17 @@ export class Pedido{
 
         this.total += Number(producto.precioTotal);
 
+        console.log("!!!!!!!!!!!!"+this.total);
+
         this.ordenes.forEach((orden, index)  =>{
             
                 if(orden.comercioId == comercio.id){               
                  
                     let objCopy = Object.assign({}, producto);
                     delete objCopy.foto;
-                    orden.productos.push(objCopy);                    
+
+                    orden.productos.push(objCopy);
+                    orden.total = this.total;                       
                     agregado = true;
                 }
                       

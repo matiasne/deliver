@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { GrupoOpciones } from '../models/grupoOpciones';
+import { GrupoOpciones } from '../Models/grupoOpciones';
 
 @Injectable({
   providedIn: 'root'

@@ -45,6 +45,7 @@ export class FormDatosEnvioPage implements OnInit {
       if(this.pedidoActual.ordenes.length > 1){
         this.calcularDistancia = false;
       }
+     //En caso de haber mas de una orden de diferentes comercios no calcula distancia de envio. 
      // if(this.pedidoActual.pedidos)
     });
 
@@ -64,36 +65,36 @@ export class FormDatosEnvioPage implements OnInit {
     }
   }
 
-  setDistancia(posiscionComercio,user){
-    console.log(posiscionComercio)
+   setDistancia(posicionComercio,user){
+    console.log(posicionComercio)
     console.log(user.posicion)
     const geo = geofirex.init(firebase);
-    if(posiscionComercio.geopoint.Latitude !=""){
-      this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.Latitude, user.posicion.geopoint.Longitude), geo.point(posiscionComercio.geopoint.Latitude, posiscionComercio.geopoint.Longitude)).toFixed(2))
+    if(posicionComercio.geopoint.Latitude !=""){
+      this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.Latitude, user.posicion.geopoint.Longitude), geo.point(posicionComercio.geopoint.Latitude, posicionComercio.geopoint.Longitude)).toFixed(2))
       console.log("distancia: ")
       console.log(this.distancia);
       if(this.distancia > 0 && this.distancia <= 1.6) {
-        console.log(70)
-        this.pedidoService.setCostoEnvio(70);
-      }  
-      if(this.distancia > 1.6 && this.distancia <= 2) {
         console.log(80)
         this.pedidoService.setCostoEnvio(80);
       }  
-      if(this.distancia > 2 && this.distancia <= 3) {
+      if(this.distancia > 1.6 && this.distancia <= 2) {
         console.log(90)
         this.pedidoService.setCostoEnvio(90);
       }  
+      if(this.distancia > 2 && this.distancia <= 3) {
+        console.log(100)
+        this.pedidoService.setCostoEnvio(100);
+      }  
       if(this.distancia > 3 && this.distancia <= 4) {
-        console.log(110)
-        this.pedidoService.setCostoEnvio(110);
+        console.log(120)
+        this.pedidoService.setCostoEnvio(120);
       }  
       if(this.distancia > 4 && this.distancia <= 5) {
-        console.log(140)
-        this.pedidoService.setCostoEnvio(140);
+        console.log(130)
+        this.pedidoService.setCostoEnvio(130);
       }  
       
-      if(this.distancia > 4){
+      if(this.distancia > 5){
         console.log(200)
         this.pedidoService.setCostoEnvio(200);
       }
