@@ -27,21 +27,20 @@ export class FormDatosUsuarioComponent implements OnInit {
 
   public geocoder:any;  
 
-  public user:UserData;
+  public user:any;
 
   constructor(
     private authService:AuthService,
     private toastController:ToastController,
     private router:Router
   ) { 
-    this.user = new UserData();
     this.geo = geofirex.init(firebase);
   }
 
   ngOnInit() {   
        
       this.onSelectValue.emit(this.user);
-      this.user.asignarValores(JSON.parse(localStorage.getItem('user')));
+      this.user = JSON.parse(localStorage.getItem('user'));
       console.log(this.user)
     
       setTimeout(() => {           
@@ -52,8 +51,8 @@ export class FormDatosUsuarioComponent implements OnInit {
 
       this.initMap("mapUser",{
         center:{
-          lat:Number(this.user.posicion.geopoint.Latitude), 
-          lng:Number(this.user.posicion.geopoint.Longitude)
+          lat:Number(this.user.posicion.geopoint.latitude), 
+          lng:Number(this.user.posicion.geopoint.longitude)
         },
         zoom:15 ,
         options: {
@@ -63,7 +62,7 @@ export class FormDatosUsuarioComponent implements OnInit {
         },    
       });
 
-      let position = {lat: Number(this.user.posicion.geopoint.Latitude), lng: Number(this.user.posicion.geopoint.Longitude)};
+      let position = {lat: Number(this.user.posicion.geopoint.latitude), lng: Number(this.user.posicion.geopoint.longitude)};
 
       var marker = this.makeMarker({
         position: position,
@@ -74,6 +73,10 @@ export class FormDatosUsuarioComponent implements OnInit {
 
       this.onChange();
 
+  }
+
+  ionViewDidEnter(){
+    
   }
 
   onChange() {
@@ -148,7 +151,7 @@ export class FormDatosUsuarioComponent implements OnInit {
         this.autocomplete.bindTo("bounds", this.map)
     }
 
-    this.autocomplete.addListener("place_changed",()=>{
+    this.autocomplete.addListener("place_changed",() => {
       console.log("place_changed");
       this.place = this.autocomplete.getPlace()
       console.log(this.place);
@@ -232,7 +235,7 @@ export class FormDatosUsuarioComponent implements OnInit {
 
     console.log(direccion_completa)
 
-    //this.user.direccion = direccion_completa;
+    this.user.direccion = direccion_completa;
 
     this.onChange();
 
