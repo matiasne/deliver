@@ -17,8 +17,8 @@ export class UserData{
     public posicion = {      
         geohash:"",
         geopoint:{
-            Latitude:"",
-            Longitude:""
+            latitude:"",
+            longitude:""
         }
 
     };

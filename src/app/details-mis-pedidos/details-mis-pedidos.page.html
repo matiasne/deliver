@@ -35,7 +35,12 @@
                 <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
               </ion-avatar>
               <ion-label>
-                <h2>{{producto.cantidad}} X {{producto.nombre}} : {{producto.precio | currency}}</h2>
+                <h2>{{producto.cantidad}} X {{producto.nombre}} :
+                  
+                  <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+                    
+                </h2>
                 <div *ngFor="let opcion of producto.opcionesSeleccionadas">
                   <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                 </div>
@@ -82,7 +87,12 @@
                   <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
                 </ion-avatar>
                 <ion-label>
-                  <h2>{{producto.cantidad}} X {{producto.nombre}} : {{producto.precio | currency}}</h2>
+                  <h2>{{producto.cantidad}} X {{producto.nombre}} : 
+                    
+                    <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+
+                  </h2>
                   <div *ngFor="let opcion of producto.opcionesSeleccionadas">
                     <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                   </div>
@@ -132,7 +142,10 @@
                   <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
                 </ion-avatar>
                 <ion-label>
-                  <h2>{{producto.cantidad}} X {{producto.nombre}} : {{producto.precio | currency}}</h2>
+                  <h2>{{producto.cantidad}} X {{producto.nombre}} : 
+                    <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+                  </h2>
                   <div *ngFor="let opcion of producto.opcionesSeleccionadas">
                     <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                   </div>
