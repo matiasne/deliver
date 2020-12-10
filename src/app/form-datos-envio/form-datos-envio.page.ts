@@ -132,25 +132,9 @@ export class FormDatosEnvioPage implements OnInit {
     this.pedidoService.setPuerta(this.user.address.puerta);
     this.pedidoService.setClienteTelefono(this.user.telefono);
 
-    this.pedidoService.save();
+   
+      this.router.navigate(['/carrito']);
     
-    if(this.authService.isAuthenticated())
-        this.presentAlert("Su pedido está en curso! Mira el panel 'Mis Pedidos' para ver el estado del mismo");
-      else
-        this.presentAlert("Recuerda Loguearte para poder hacer un seguimiento de tus pedidos!");
-    
-        
-        
-    if(localStorage.getItem('comercioUnico')){
-      this.router.navigate(['/details-comercio',{
-        id:localStorage.getItem('comercioUnicoId'),
-        enLocal:localStorage.getItem('enLocal'),
-        comercioUnico:localStorage.getItem('comercioUnico'),
-      }]);
-    }
-    else{
-      this.router.navigate(['/home']);
-    }
   }
 
 
