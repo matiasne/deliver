@@ -7,7 +7,7 @@
   <ion-card > 
     <ion-card-header>
       <!--ion-card-subtitle>Detalle de su pedido</ion-card-subtitle-->
-      <ion-card-title>Pedido en Curso</ion-card-title>
+      <ion-card-title>Último Paso</ion-card-title>
     </ion-card-header>
     <ion-card-content>
        
@@ -53,7 +53,7 @@
   <h3>Total: {{pedidoActual.total | currency}}</h3>
   <ion-toolbar>
     <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
-    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="confirmar()">Confirmar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="confirmar()">Confirmar Pedido</ion-button>
   </ion-toolbar>
   
 </ion-footer>
