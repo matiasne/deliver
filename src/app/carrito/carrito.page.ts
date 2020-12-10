@@ -77,8 +77,8 @@ export class CarritoPage implements OnInit {
           this.toastService.mensaje("","Por favor logueate antes de continuar!");
           this.router.navigate(['login']);
         }
-        if(subs)
-          subs.unsubscribe();
+       // if(subs)
+         // subs.unsubscribe();
       });
      
      

@@ -58,6 +58,7 @@ export class FormDatosEnvioPage implements OnInit {
 
   setValue(newValue : any){    
     this.user.asignarValores(newValue);
+    console.log(this.user.direccion);
     if(this.calcularDistancia){
       this.setDistancia(this.pedidoActual.ordenes[0].comercioPosicion,this.user);
     }
