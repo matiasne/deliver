@@ -23,8 +23,6 @@ export class FormAgregarPedidoPage implements OnInit {
   public comentario:string = "";
   public cantidad:number = 1;
 
-  public precioMostrar = 0;
-
   constructor(
     public modalController: ModalController,
     public toastController: ToastController,
@@ -57,8 +55,14 @@ export class FormAgregarPedidoPage implements OnInit {
         this.producto.cantidad = 1;
         //this.producto.precioTotal = this.producto.precio;
 
-        this.addToTotal(0,this.producto.precio,10);
 
+
+
+        this.producto.precioTotal = this.producto.precio;
+
+        if(this.producto.promocion){
+          this.producto.precioTotal = this.producto.promocion;
+        }
         
 
         this.producto.gruposOpciones.forEach(grupo=>{
@@ -172,7 +176,7 @@ export class FormAgregarPedidoPage implements OnInit {
     this.producto.cantidad +=1;
     let precioViejo = this.producto.precioTotal;
     this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+
   }
 
   restarCantidad(){ 
@@ -182,17 +186,22 @@ export class FormAgregarPedidoPage implements OnInit {
       return;
     }   
     
-    let precioViejo = this.producto.precioTotal;
+   
         this.producto.precioTotal = this.valorTotal();
-        this.addToTotal(precioViejo,this.producto.precioTotal,10);
+
   }
 
   valorTotal(){
     let valorUno = this.producto.precio;
+    
+    if(this.producto.promocion){
+      valorUno = Number(this.producto.promocion);
+    }
+   
     this.producto.gruposOpciones.forEach(grupos =>{
       grupos.opciones.forEach (opcion =>{
         if(opcion.seleccionada || opcion.cantidad > 0)
-          valorUno += opcion.precioVariacion * opcion.cantidad;
+          valorUno += Number(opcion.precioVariacion * opcion.cantidad);
       })
     });
     console.log(this.producto.cantidad+" "+valorUno)
@@ -228,9 +237,10 @@ export class FormAgregarPedidoPage implements OnInit {
       this.producto.gruposOpciones[grupoIndex].cantidadHabilitada = false;
     }    
 
-    let precioViejo = this.producto.precioTotal;
     this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
+    
+    
+
     
 
    
@@ -262,7 +272,6 @@ export class FormAgregarPedidoPage implements OnInit {
 
     let precioViejo = this.producto.precioTotal;
     this.producto.precioTotal = this.valorTotal();
-    this.addToTotal(precioViejo,this.producto.precioTotal,10);
 
     console.log(this.producto.gruposOpciones[grupoIndex].maximo)
     console.log(this.producto.gruposOpciones[grupoIndex].cantidadTotal)
@@ -270,27 +279,6 @@ export class FormAgregarPedidoPage implements OnInit {
   }
 
 
-  addToTotal(start, end, duration) {
-
-    this.producto.precioTotal = end;
-    this.precioMostrar = end;
-    /*if(start == end){
-      return;
-    }
-
-    var range = end - start;
-    var current = start;
-    var increment = end > start? 1 : -1;
-    var stepTime = Math.abs(Math.floor(duration / range));
-    var timer = setInterval(() => {
-        current += increment;
-        this.precioMostrar = current;
-
-        if (current == end) {
-            clearInterval(timer);
-        }
-      1 }, stepTime);*/
-  }
 
  
 

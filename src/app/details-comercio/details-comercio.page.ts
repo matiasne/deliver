@@ -18,6 +18,7 @@ import { Producto } from '../Models/producto';
 import { NotificacionesService } from '../services/notificaciones.service';
 import { MesasService } from '../services/mesas.service';
 import { ToastService } from '../services/toast.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-details-comercio',
@@ -68,7 +69,8 @@ export class DetailsComercioPage implements OnInit {
     private alertController:AlertController,
     private notificacionesService:NotificacionesService,
     private mesasService:MesasService,
-    private toastService:ToastService
+    private toastService:ToastService,
+    private authService:AuthService
   ) { 
     this.comercio = new Comercio();
     this.ultimoProducto = new Producto();
@@ -237,8 +239,18 @@ export class DetailsComercioPage implements OnInit {
 
   async irCarrito() {
     
-    
-      this.router.navigate(['/carrito']);    
+    let subs = this.authService.authenticationState.subscribe(state => {
+      if (state) {   
+        this.router.navigate(['/form-datos-envio']); 
+      }
+      else{
+        this.toastService.mensaje("","Por favor logueate antes de continuar!");
+        this.router.navigate(['login']);
+      }
+     // if(subs)
+       // subs.unsubscribe();
+    });
+         
     
   }
    
