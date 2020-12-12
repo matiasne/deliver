@@ -27,22 +27,21 @@ export class FormDatosUsuarioComponent implements OnInit {
 
   public geocoder:any;  
 
-  public user:any;
+  public user:UserData;
 
   constructor(
     private authService:AuthService,
     private toastController:ToastController,
     private router:Router
   ) { 
+    this.user = new UserData();
     this.geo = geofirex.init(firebase);
   }
 
-  ngOnInit() {   
-       
+  ngOnInit() {         
       this.onSelectValue.emit(this.user);
-      this.user = JSON.parse(localStorage.getItem('user'));
-      console.log(this.user)
-    
+      this.user.asignarValores(JSON.parse(localStorage.getItem('user')));
+      console.log(this.user)    
       setTimeout(() => {           
         this.initAutocomplete('pac-input');     
       }, 3000);  
@@ -157,8 +156,8 @@ export class FormDatosUsuarioComponent implements OnInit {
       console.log(this.place);
 
       this.user.posicion = this.geo.point(this.place.geometry.location.lat(), this.place.geometry.location.lng());
-      this.user.posicion.geopoint.Latitude = this.place.geometry.location.lat();
-      this.user.posicion.geopoint.Longitude = this.place.geometry.location.lng();
+      //this.user.posicion.geopoint.latitude = this.place.geometry.location.lat();
+      //this.user.posicion.geopoint.longitude = this.place.geometry.location.lng();
 
       var marker = this.makeMarker({
         position: {lat: Number(this.place.geometry.location.lat()), lng: Number(this.place.geometry.location.lng())},
@@ -179,75 +178,23 @@ export class FormDatosUsuarioComponent implements OnInit {
 
       setTimeout(function(){google.maps.event.removeListener(zoomChangeBoundsListener)}, 2000);
 
-      this.fillInAddressForm(this.place.address_components);
+     // this.fillInAddressForm(this.place.address_components);
+      this.onChange();
+
+      setTimeout(function () {
+        document.getElementById('pac-input').click();
+      }, 2500);
     
     });
 
   }
 
-  
-  fillInAddressForm(addressComponents = this.place.address_components) {
-  
-    var pickedAddress =  {
-      street_number: ["street_number", "short_name"],
-      route: ["street_name", "long_name"],
-      locality: ["locality", "long_name"],
-      administrative_area_level_1: ["state", "short_name"],
-      country: ["country", "long_name"],
-      postal_code: ["zip", "short_name"],
-      sublocality_level_1: ["sublocality", "long_name"],
-    }
-
-    console.log(pickedAddress.street_number[1]);
-
-    var addressType; 
-
-    console.log(addressComponents)
-
-    // Get each component of the address from the place details,
-    // and then fill-in the corresponding field on the form.
-    var direccion_completa ="";
-    for (var i = 0; i < addressComponents.length; i++) {
-        addressType = addressComponents[i].types[0]
-
-        if (pickedAddress[addressType]) {
-            console.log(addressType)
-            direccion_completa = direccion_completa +" "+  addressComponents[i][pickedAddress[addressType][1]]+","
-
-            if(addressType == "country")
-              this.user.address.pais = addressComponents[i][pickedAddress[addressType][1]];
-            
-            if(addressType == "locality")
-              this.user.address.localidad = addressComponents[i][pickedAddress[addressType][1]];
-
-            if(addressType == "route")
-              this.user.address.calleNombre = addressComponents[i][pickedAddress[addressType][1]];
-
-            if(addressType == "street_number")
-              this.user.address.calleNumero = addressComponents[i][pickedAddress[addressType][1]];
-            
-            if(addressType == "administrative_area_level_1")
-              this.user.address.provincia = addressComponents[i][pickedAddress[addressType][1]];
-            
-        }
-        //this.user.direccion = direccion_completa;
-    }
-
-    console.log(direccion_completa)
-
-    this.user.direccion = direccion_completa;
-
-    this.onChange();
-
-    setTimeout(function () {
-      document.getElementById('pac-input').click();
-    }, 2500);
-      
-      
-  }
 
 
   makeMarker(options) {
+    this.markers.forEach(element => {
+      element.setMap(null);
+    });
     var marker = new google.maps.Marker(options)
     this.markers.push(marker)
     return marker

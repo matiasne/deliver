@@ -34,55 +34,26 @@ export class CarritoPage implements OnInit {
 
     let enLocal = localStorage.getItem('enLocal');
 
-    if(enLocal == "true"){
-      let user  = this.authService.getActualUser();
+    
       
-      if(user)
-        this.pedidoService.setClienteNombre(user.displayName);
-      else
-        this.pedidoService.setClienteNombre("sin nombre");
+    this.pedidoService.save();
 
-      this.pedidoService.setPosition("local");
-      this.pedidoService.setDireccion("local");
-      this.pedidoService.setPiso("local");
-      this.pedidoService.setPuerta("local");
-      this.pedidoService.setClienteTelefono("local");
-      this.pedidoService.save();
 
-      if(this.authService.isAuthenticated())
+    if(this.authService.isAuthenticated())
         this.presentAlert("Su pedido está en curso! Mira el panel 'Mis Pedidos' para ver el estado del mismo");
       else
         this.presentAlert("Recuerda Loguearte para poder hacer un seguimiento de tus pedidos!");
-      
-     
-      if(localStorage.getItem('comercioUnico')){
-        this.router.navigate(['/details-comercio',{
-          id:localStorage.getItem('comercioUnicoId'),
-          enLocal:localStorage.getItem('enLocal'),
-          comercioUnico:localStorage.getItem('comercioUnico'),
-        }]);
-      }
-      else{
-        this.router.navigate(['/home']);
+    
         
-      }
+        
+    this.router.navigate(['/home']);
+        
       
-    }
-    else{
-      let subs = this.authService.authenticationState.subscribe(state => {
-        if (state) {   
-          this.router.navigate(['/form-datos-envio']);
-        }
-        else{
-          this.toastService.mensaje("","Por favor logueate antes de continuar!");
-          this.router.navigate(['login']);
-        }
-        if(subs)
-          subs.unsubscribe();
-      });
+      
+      
      
      
-    }
+    
 
     
 

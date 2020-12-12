@@ -7,7 +7,7 @@
   <ion-card > 
     <ion-card-header>
       <!--ion-card-subtitle>Detalle de su pedido</ion-card-subtitle-->
-      <ion-card-title>Pedido en Curso</ion-card-title>
+      <ion-card-title>Último Paso</ion-card-title>
     </ion-card-header>
     <ion-card-content>
        
@@ -19,7 +19,11 @@
               <ion-item *ngFor="let producto of orden.productos; let p = index">
                 
                 <ion-label>
-                  <h2><span class="color-text-green">{{producto.cantidad}}X</span> {{producto.nombre}} : {{producto.precio | currency}}</h2>
+                  <h2><span class="color-text-green">{{producto.cantidad}}X</span> 
+                    {{producto.nombre}} :
+                    <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+                  </h2>
                   <div *ngFor="let opcion of producto.opcionesSeleccionadas">
                   <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="color-text-green">{{opcion.cantidad}}X</span> {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion | currency}}</span></h3>
                   </div>
@@ -49,7 +53,7 @@
   <h3>Total: {{pedidoActual.total | currency}}</h3>
   <ion-toolbar>
     <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
-    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="confirmar()">Confirmar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="confirmar()">Confirmar Pedido</ion-button>
   </ion-toolbar>
   
 </ion-footer>

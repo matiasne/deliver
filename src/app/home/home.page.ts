@@ -32,7 +32,8 @@ export class HomePage  {
   slideOptsThree = {
     initialSlide: 0,
     slidesPerView: 4,
-    autoplay:true
+    autoplay:true,
+    speed: 400,
   };
 
   slideOptsCategorias = {
@@ -92,22 +93,7 @@ export class HomePage  {
     });
 
     
-    //this.presentLoading();
-    this.comerciosSubscription = this._comerciosService.getUltimos().subscribe((snapshot) => {
-      this.comercios = [];
-      var agregados = 0;
-      snapshot.forEach((snap: any, index) => {
-
-        var comercio = snap.payload.doc.data();  
-        comercio.id = snap.payload.doc.id;
-        this.setearAbiertoCerrado(comercio);  
-        this.comercios.push(comercio);
-              
-      });
-      console.log(this.comercios);  
-      //this.hideLoading();    
-      this.comerciosSubscription.unsubscribe();
-    });    
+    
   }
 
 
@@ -124,6 +110,25 @@ export class HomePage  {
     localStorage.removeItem('comercioUnico')
 
     
+  }
+
+  ionViewDidEnter(){
+    //this.presentLoading();
+    this.comerciosSubscription = this._comerciosService.getUltimos().subscribe((snapshot) => {
+      this.comercios = [];
+      var agregados = 0;
+      snapshot.forEach((snap: any, index) => {
+
+        var comercio = snap.payload.doc.data();  
+        comercio.id = snap.payload.doc.id;
+        this.setearAbiertoCerrado(comercio);  
+        this.comercios.push(comercio);
+              
+      });
+      console.log(this.comercios);  
+      //this.hideLoading();    
+      this.comerciosSubscription.unsubscribe();
+    });    
   }
 
   lectorDeCodigo() {
