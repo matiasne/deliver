@@ -42,10 +42,10 @@ export class DetailsMisPedidosPage implements OnInit {
     this.pedidosATomar = [];
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
   }
 
-  ionViewDidEnter() {
+  ngOnInit() {
 
     //Usuario clásico: solo los pedidos de ese usuario
     this.subsPedidos = this.pedidoService.getPedidosCliente().subscribe((snapshot) => {

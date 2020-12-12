@@ -12,7 +12,7 @@
     <ion-card-content>
        
         <ion-list-header>
-          Productos
+          Productos:
         </ion-list-header> 
         <div *ngFor="let orden of pedidoActual.ordenes; let c = index">   
           <ion-list>                   
@@ -37,12 +37,35 @@
               </ion-item>
               <ion-item>                
                 <ion-label>                                 
-                  <h3>Más costo de envío</h3>
+                  <h3>Costo de Envío: {{pedidoActual.costoEnvio | currency}}</h3>
                 </ion-label>
               </ion-item>
             </ion-list>
             
         </div> 
+        <div>
+          <ion-list-header>
+            Datos de Envío:
+          </ion-list-header> 
+          <ion-item>                
+            <ion-label>                                 
+              <h3>A nombre: {{pedidoActual.cliente.nombre}}</h3>
+              <h3>Dirección: {{pedidoActual.cliente.direccion}}
+
+                <span *ngIf="pedidoActual.cliente.piso">
+                  Piso: {{pedidoActual.cliente.piso}}
+                </span>
+
+                <span *ngIf="pedidoActual.cliente.puerta">
+                  Puerta: {{pedidoActual.cliente.puerta}}
+                </span>
+              </h3>
+              <h3>Telefono: {{pedidoActual.cliente.telefono}}
+              </h3>
+            </ion-label>
+          </ion-item>
+          
+        </div>
         
     </ion-card-content>
     
