@@ -27,6 +27,7 @@ export class CarritoPage implements OnInit {
   ngOnInit() {
     this.pedidoService.getActualSaleSubs().subscribe(data=>{
       this.pedidoActual = data;
+      console.log(this.pedidoActual)
     })
   }
 
