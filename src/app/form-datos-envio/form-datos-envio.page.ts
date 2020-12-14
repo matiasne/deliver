@@ -48,7 +48,7 @@ export class FormDatosEnvioPage implements OnInit {
      //En caso de haber mas de una orden de diferentes comercios no calcula distancia de envio. 
      // if(this.pedidoActual.pedidos)
     });
-
+    this.pedidoService.setCostoEnvio(0);
 
   }
 
@@ -68,6 +68,7 @@ export class FormDatosEnvioPage implements OnInit {
     console.log(posicionComercio)
     console.log(user.posicion.geopoint.longitude)
     const geo = geofirex.init(firebase);
+    this.pedidoService.setCostoEnvio(0);
     if(posicionComercio.geopoint.Latitude !="" && user.posicion.geopoint.longitude){
       this.distancia = Number(geo.distance(geo.point(user.posicion.geopoint.latitude, user.posicion.geopoint.longitude), geo.point(posicionComercio.geopoint.Latitude, posicionComercio.geopoint.Longitude)).toFixed(2))
       console.log("distancia: ")
