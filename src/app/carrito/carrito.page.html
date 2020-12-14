@@ -36,8 +36,11 @@
     
               </ion-item>
               <ion-item>                
-                <ion-label>                                 
+                <ion-label *ngIf="pedidoActual.costoEnvio != 0">                                 
                   <h3>Costo de Envío: {{pedidoActual.costoEnvio | currency}}</h3>
+                </ion-label>
+                <ion-label *ngIf="pedidoActual.costoEnvio == '0'">                                 
+                  <h3>No se ha podido calcular el costo de envío</h3>
                 </ion-label>
               </ion-item>
             </ion-list>
