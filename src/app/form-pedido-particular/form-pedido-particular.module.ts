@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { FormPedidoParticularPageRoutingModule } from './form-pedido-particular-routing.module';
 
 import { FormPedidoParticularPage } from './form-pedido-particular.page';
+import { ComponentsModule } from '../Components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     FormPedidoParticularPageRoutingModule
