@@ -151,12 +151,18 @@ export class HomePage  {
       });
   }
 
+  /*
   pedido(){
     var  element = document.createElement('a') as HTMLElement;
     element.setAttribute('href', 'https://wa.me/5493571666966?text=Hola! Necesito un pedido especial');
     element.setAttribute('style', 'display:none;');
     element.click();
   }
+  */
+ pedido(){
+  this.router.navigate(['/form-pedido-particular'])
+      }
+
 
   getJsonFromUrl(url) {
     if(!url) url = location.href;
