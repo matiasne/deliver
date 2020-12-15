@@ -122,10 +122,41 @@
   </div>
 
   <div *ngFor="let pedido of pedidosParticulares">
-    <h3>{{pedido.desde.direccion}}</h3>
-      <h3>{{pedido.hasta.direccion}}</h3>
-        <h3>{{pedido.costoEnvio}}</h3>
-        <h3>{{pedido.comentario}}</h3>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Desde</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+             <h3>{{pedido.desde.direccion}}</h3>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Hasta</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+             <h3>{{pedido.hasta.direccion}}</h3>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Costo envío</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+             <h3>{{pedido.costoEnvio}}</h3>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Comentario</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+             <h3>{{pedido.comentario}}</h3>
+          </ion-card-content>
+        </ion-card>
   </div>
   
   <div *ngFor="let comercioPedidos of pedidosABuscar">
