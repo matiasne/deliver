@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>form-pedido-particular</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-text color="primary">
+  </ion-text>
+  <ion-item>
+    <ion-input id="pac-input-desde" [(ngModel)]="pedido.desde.direccion"  type="text" placeholder="Dirección Retiro"></ion-input>
+  </ion-item>
+  <ion-row>
+    <ion-col >
+      <ion-item>
+        <ion-input name="piso" type="text" placeholder="Piso" [(ngModel)]="pedido.desde.piso" required [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-input name="puerta" type="text" placeholder="Puerta" [(ngModel)]="pedido.desde.puerta" required [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>  
+  <div class="map-container">
+    <div id="mapDesde" class="map"></div>
+  </div> 
+
+  <ion-text color="primary">
+  </ion-text>
+  <ion-item>
+    <ion-input id="pac-input-hasta" [(ngModel)]="direccionHasta"  type="text" placeholder="Dirección Envío"></ion-input>
+  </ion-item>
+  <ion-row>
+    <ion-col >
+      <ion-item>
+        <ion-input name="piso" type="text" placeholder="Piso" [(ngModel)]="pedido.hasta.piso" required [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-input name="puerta" type="text" placeholder="Puerta" [(ngModel)]="pedido.hasta.puerta" required [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>  
+  <div class="map-container">
+    <div id="mapHasta" class="map"></div>
+  </div> 
+
+  <ion-item>
+    <ion-label position="floating">Comentario adicional</ion-label>
+    <ion-textarea class="ion-textarea-bordes" [(ngModel)]="pedido.comentario"></ion-textarea>
+  </ion-item> 
+
+
+  <ion-item>
+    <ion-input name="nombre" type="text" placeholder="Nombre y Apellido" [(ngModel)]="pedido.remitente.nombre"></ion-input>
+  </ion-item>
+
+  
+  <ion-text color="primary">
+  </ion-text>  
+  <ion-item>
+    <ion-input name="telefono" type="number" placeholder="Teléfono" [(ngModel)]="pedido.remitente.telefono"></ion-input>
+  </ion-item>
+
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button class="btn-footer-agregar" color="light" slot="start" (click)="cancelar()">Cancelar</ion-button>
+    <ion-button class="btn-footer-agregar" color="success" slot="end" (click)="guardar()">Siguiente</ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -120,6 +120,13 @@
       </ion-card>
     </div>
   </div>
+
+  <div *ngFor="let pedido of pedidosParticulares">
+    <h3>{{pedido.desde.direccion}}</h3>
+      <h3>{{pedido.hasta.direccion}}</h3>
+        <h3>{{pedido.costoEnvio}}</h3>
+        <h3>{{pedido.comentario}}</h3>
+  </div>
   
   <div *ngFor="let comercioPedidos of pedidosABuscar">
     

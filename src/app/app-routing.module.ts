@@ -75,6 +75,10 @@ const routes: Routes = [
     path: 'details-preguntas-frecuentes',
     loadChildren: () => import('./details-preguntas-frecuentes/details-preguntas-frecuentes.module').then( m => m.DetailsPreguntasFrecuentesPageModule)
   },
+  {
+    path: 'form-pedido-particular',
+    loadChildren: () => import('./form-pedido-particular/form-pedido-particular.module').then( m => m.FormPedidoParticularPageModule)
+  },
 ];
 
 @NgModule({

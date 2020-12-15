@@ -42,6 +42,7 @@ export class FormDatosUsuarioComponent implements OnInit {
       this.onSelectValue.emit(this.user);
       this.user.asignarValores(JSON.parse(localStorage.getItem('user')));
       console.log(this.user)    
+     
       setTimeout(() => {           
         this.initAutocomplete('pac-input');     
       }, 3000);  

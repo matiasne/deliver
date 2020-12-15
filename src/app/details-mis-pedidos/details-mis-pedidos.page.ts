@@ -7,6 +7,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Subscription } from 'rxjs';
 import { ComerciosService } from '../services/comercios.service';
 import { AuthService } from '../services/auth.service';
+import { PedidoEspecialService } from '../services/pedido-especial.service';
 
 @Component({
   selector: 'app-details-mis-pedidos',
@@ -19,6 +20,8 @@ export class DetailsMisPedidosPage implements OnInit {
   public pedidosCliente;
   public pedidosATomar;
   public pedidosABuscar;
+  public pedidosParticulares;
+
   public commerce_id;
 
   public commerceSubscription:Subscription;
@@ -31,6 +34,7 @@ export class DetailsMisPedidosPage implements OnInit {
     public modalController: ModalController,
     private router: Router,
     private pedidoService:PedidoService,
+    private pedidosParticularesService:PedidoEspecialService,
     public alertController: AlertController,
     private localNotifications: LocalNotifications,
     private _comerciosService:ComerciosService,
@@ -40,12 +44,28 @@ export class DetailsMisPedidosPage implements OnInit {
     this.pedidosCliente = [];
     this.pedidosABuscar = [];
     this.pedidosATomar = [];
+    this.pedidosParticulares =[];
   }
 
   ionViewDidEnter() {
+
   }
 
   ngOnInit() {
+
+    if(this.auth.getActualUser().email == "deliver.pedidos@gmail.com"){
+
+      this.pedidosParticularesService.getAll().subscribe((snapshot)=>{
+        this.pedidosParticulares = [];
+        snapshot.forEach((snap: any) => {
+          let pedido:any = snap.payload.doc.data();
+          pedido.id = snap.payload.doc.id;          
+          this.pedidosParticulares.push(pedido); 
+        });
+      })
+
+    }
+   
 
     //Usuario clásico: solo los pedidos de ese usuario
     this.subsPedidos = this.pedidoService.getPedidosCliente().subscribe((snapshot) => {

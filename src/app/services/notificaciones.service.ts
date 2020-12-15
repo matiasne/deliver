@@ -83,14 +83,17 @@ export class NotificacionesService {
         usuario.id = snapshot.payload.id;   
         console.log(usuario);
 
+        if(usuario.notification_token){
+          this.enviarHttp(usuario.notification_token,titulo,mensaje).subscribe(data=>{
+            console.log(data);
+          });
+        }
 
-        this.enviarHttp(usuario.notification_token,titulo,mensaje).subscribe(data=>{
-          console.log(data);
-        });
-
-        this.enviarHttp(usuario.notificacionesWebToken,titulo,mensaje).subscribe(data=>{
-          console.log(data);
-        });
+        if(usuario.notificacionesWebToken){
+          this.enviarHttp(usuario.notificacionesWebToken,titulo,mensaje).subscribe(data=>{
+            console.log(data);
+          });
+        }
 
         /*let notificacion = new Notificacion();
         notificacion.userId = usuario.id;
