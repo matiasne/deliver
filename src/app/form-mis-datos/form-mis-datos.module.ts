@@ -8,11 +8,13 @@ import { FormMisDatosPageRoutingModule } from './form-mis-datos-routing.module';
 
 import { FormMisDatosPage } from './form-mis-datos.page';
 import { FormDatosUsuarioComponent } from '../Components/form-datos-usuario/form-datos-usuario.component';
+import { ComponentsModule } from '../Components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ComponentsModule,
     ReactiveFormsModule,
     IonicModule,
     FormMisDatosPageRoutingModule
