@@ -1,34 +1,86 @@
 <ion-header>
-  <app-header [titulo]="'Mis Pedidos'" [button]="'menu'" ></app-header>  
+  <app-header [titulo]="'Mis Pedidos'" [button]="'menu'" ></app-header>
 </ion-header>
 
-<ion-content style="margin-top: 50px;"> 
+<ion-content style="margin-top: 50px;">
   
   <ion-card *ngIf="sinPedidos">
     <ion-card-header>
-
+      
     </ion-card-header>
-    <ion-card-content>  
+    <ion-card-content>
       <div class="user-icon">
         <img  src="../assets/icons/food.png"  alt="">
-      </div>   
+      </div>
       <ion-list-header>
         Todavía no has hecho pedidos. Busca en todas nuestras opciones y anímate a hacer tu primer pedido!
-      </ion-list-header> 
+      </ion-list-header>
     </ion-card-content>
   </ion-card>
-  <ion-card *ngFor="let pedido of pedidosCliente"> 
-   
-      <ion-card-header>
-        <ion-card-title>Pedido en Curso</ion-card-title>
-        realizado: {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yyyy'}}
-      </ion-card-header>
-      <ion-card-content>     
+  <ion-card *ngFor="let pedido of pedidosCliente">
+    
+    <ion-card-header>
+      <ion-card-title>Pedido en Curso</ion-card-title>
+      realizado: {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yyyy'}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list-header>
+        Productos
+      </ion-list-header>
+      
+      <ion-list>
+        <ion-item *ngFor="let producto of pedido.productos; let p = index">
+          <ion-avatar slot="start">
+            <img src="{{producto.foto}}" *ngIf="producto.foto">
+            <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{producto.cantidad}} X {{producto.nombre}} :
+              
+              <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+              <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+              
+            </h2>
+            <div *ngFor="let opcion of producto.opcionesSeleccionadas">
+              <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
+            </div>
+            <h3>{{producto.comentario}}</h3>
+            <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2>   
+      <h2 *ngIf="pedido.demora == 0 && pedido.rechazado != '1'" style="color:rgb(202, 69, 69)">El comercio aún no ha tomado el pedido.</h2>
+      <h2 *ngIf="pedido.demora != 0 && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">Demora estimada: {{pedido.faltanMinutos}} minutos</h2>         
+      <ion-item *ngIf="pedido.rechazado == '1'">
+        <p>Su pedido ha sido rechazado</p>
+        <ion-button class="btn-footer-agregar" color="danger" slot="end" (click)="borrar(pedido)">OK</ion-button>
+      </ion-item>
+      <hr>
+      <h3> Telefono del comercio: {{pedido.comercioTelefono}}<br></h3>
+    </ion-card-content>
+    
+    <ion-item *ngIf="pedido.rechazado == '0'">
+      <ion-button class="btn-footer-agregar" color="primary" slot="end" (click)="recibido(pedido)">Recibido!</ion-button>
+    </ion-item>
+    
+  </ion-card>
+  
+  <div *ngFor="let comercioPedidos of pedidosATomar">
+    
+    <div *ngFor="let pedido of comercioPedidos">
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Pedido</ion-card-title>
+          realizado: {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yyyy'}}
+        </ion-card-header>
+        <ion-card-content>
           <ion-list-header>
             Productos
-          </ion-list-header> 
-         
-          <ion-list>                   
+          </ion-list-header>
+          
+          <ion-list>
             <ion-item *ngFor="let producto of pedido.productos; let p = index">
               <ion-avatar slot="start">
                 <img src="{{producto.foto}}" *ngIf="producto.foto">
@@ -38,70 +90,18 @@
                 <h2>{{producto.cantidad}} X {{producto.nombre}} :
                   
                   <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
-                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
-                    
+                  <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+                  
                 </h2>
                 <div *ngFor="let opcion of producto.opcionesSeleccionadas">
                   <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
                 </div>
                 <h3>{{producto.comentario}}</h3>
                 <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
-              </ion-label>          
+              </ion-label>
             </ion-item>
           </ion-list>
-          <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2>   
-          <h2 *ngIf="pedido.demora == 0 && pedido.rechazado != '1'" style="color:rgb(202, 69, 69)">El comercio aún no ha tomado el pedido.</h2>
-          <h2 *ngIf="pedido.demora != 0 && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">Demora estimada: {{pedido.faltanMinutos}} minutos</h2>         
-          <ion-item *ngIf="pedido.rechazado == '1'">
-            <p>Su pedido ha sido rechazado</p>
-            <ion-button class="btn-footer-agregar" color="danger" slot="end" (click)="borrar(pedido)">OK</ion-button>
-          </ion-item>
-          <hr>
-          <h3> Telefono del comercio: {{pedido.comercioTelefono}}<br></h3>
-      </ion-card-content>
-
-      <ion-item *ngIf="pedido.rechazado == '0'">
-        <ion-button class="btn-footer-agregar" color="primary" slot="end" (click)="recibido(pedido)">Recibido!</ion-button>
-      </ion-item>
-     
-  </ion-card>
-
-  <div *ngFor="let comercioPedidos of pedidosATomar">
-    
-    <div *ngFor="let pedido of comercioPedidos">
-      
-      <ion-card> 
-        <ion-card-header>
-          <ion-card-title>Pedido</ion-card-title>
-          realizado: {{pedido.createdAt.toDate() | date:'hh:mm aaa dd/MM/yyyy'}}
-        </ion-card-header>
-        <ion-card-content>     
-            <ion-list-header>
-              Productos
-            </ion-list-header> 
-            
-            <ion-list>                   
-              <ion-item *ngFor="let producto of pedido.productos; let p = index">
-                <ion-avatar slot="start">
-                  <img src="{{producto.foto}}" *ngIf="producto.foto">
-                  <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
-                </ion-avatar>
-                <ion-label>
-                  <h2>{{producto.cantidad}} X {{producto.nombre}} : 
-                    
-                    <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
-                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
-
-                  </h2>
-                  <div *ngFor="let opcion of producto.opcionesSeleccionadas">
-                    <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
-                  </div>
-                  <h3>{{producto.comentario}}</h3>
-                  <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
-                </ion-label>          
-              </ion-item>             
-            </ion-list>
-            <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2> 
+          <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2>
         </ion-card-content>
         
         <ion-item *ngIf="pedido.estado == '0'">
@@ -120,106 +120,99 @@
       </ion-card>
     </div>
   </div>
-
+  
   <div *ngFor="let pedido of pedidosParticulares">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Desde</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-             <h3>{{pedido.desde.direccion}}</h3>
-          </ion-card-content>
-        </ion-card>
+    <ion-card>
+        
+        <ion-card-header>
+          <ion-card-title>Desde</ion-card-title>
+          {{pedido.desde.direccion}}
+        </ion-card-header>
+        
+        <ion-card-header>
+          <ion-card-title>Hasta</ion-card-title>
+          {{pedido.hasta.direccion}}
+        </ion-card-header>
+        
+        <ion-card-header>
+          <ion-card-title>Costo envío</ion-card-title>
+          {{pedido.costoEnvio}}
+        </ion-card-header>
 
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Hasta</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-             <h3>{{pedido.hasta.direccion}}</h3>
-          </ion-card-content>
-        </ion-card>
+        
+        <ion-card-header>
+          <ion-card-title>Comentario</ion-card-title>
+          {{pedido.comentario}}
+        </ion-card-header>
 
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Costo envío</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-             <h3>{{pedido.costoEnvio}}</h3>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Comentario</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-             <h3>{{pedido.comentario}}</h3>
-          </ion-card-content>
-        </ion-card>
+        <ion-item>
+          <ion-button class="btn-footer-agregar" color="primary" slot="end" (click)="buscado(pedido)">Entregado!</ion-button>
+        </ion-item>
+      
+    </ion-card>
   </div>
   
   <div *ngFor="let comercioPedidos of pedidosABuscar">
     
     <div *ngFor="let pedido of comercioPedidos" >
-      <ion-card> 
+      <ion-card>
         
         <ion-card-header>
           <ion-card-title>Pedido</ion-card-title>
           realizado: {{pedido.createdAt.toDate()  | date:'hh:mm aaa dd/MM/yyyy'}}
         </ion-card-header>
-        <ion-card-content>     
-            <ion-list-header>
-              Productos
-            </ion-list-header> 
-            
-            <ion-list>                   
-              <ion-item *ngFor="let producto of pedido.productos; let p = index">
-                <ion-avatar slot="start">
-                  <img src="{{producto.foto}}" *ngIf="producto.foto">
-                  <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
-                </ion-avatar>
-                <ion-label>
-                  <h2>{{producto.cantidad}} X {{producto.nombre}} : 
-                    <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
-                    <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
-                  </h2>
-                  <div *ngFor="let opcion of producto.opcionesSeleccionadas">
-                    <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
-                  </div>
-                  <h3>{{producto.comentario}}</h3>
-                  <h3>Subtotal:{{producto.precioTotal | currency}}</h3>       
-                </ion-label>          
-              </ion-item>
-              <ion-item>
-                <br>
-                Buscar en: {{pedido.comercioNombre}} <br>
-                Direccion: {{pedido.comercioDireccion}}
-                Telefono:{{pedido.comercioTelefono}}<br>  
-                <br>           
-              </ion-item>
-              <ion-item>
-                <br>
-                Para: {{pedido.clienteNombre}}<br>
-                Telefono:{{pedido.clienteTelefono}}<br>
-                Direccion: {{pedido.clienteDireccion}}<br> 
-                <br>
-                     
-              </ion-item>
-              <ion-item *ngIf="pedido.piso != ''">
-                Piso:{{pedido.clientePiso}} <br>
-                Puerta:{{pedido.clientePuerta}}
-              </ion-item>     
-            </ion-list>
-            <h2 *ngIf="pedido.estado == '0' && pedido.rechazado != '1'" style="color:rgb(202, 78, 69)">El Comercio aún no ha tomado el pedido</h2>
-            <h2 *ngIf="pedido.estado == '1' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">Demora estimada: {{pedido.faltanMinutos}} minutos</h2>
-            <h2 *ngIf="pedido.estado == '2' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">
-              El pedido se encuentra listo!
-            </h2>
-            <h2 *ngIf="pedido.rechazado == '1'" style="color:rgb(202, 78, 69)">
-              El pedido ha sido rechazado por el comercio
-            </h2>
-            <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2>  
+        <ion-card-content>
+          <ion-list-header>
+            Productos
+          </ion-list-header>
+          
+          <ion-list>
+            <ion-item *ngFor="let producto of pedido.productos; let p = index">
+              <ion-avatar slot="start">
+                <img src="{{producto.foto}}" *ngIf="producto.foto">
+                <img src="../../assets/icons/producto.png" *ngIf="!producto.foto">
+              </ion-avatar>
+              <ion-label>
+                <h2>{{producto.cantidad}} X {{producto.nombre}} :
+                  <span *ngIf="producto.promocion">{{producto.promocion | currency}}</span>
+                  <span *ngIf="!producto.promocion">{{producto.precio | currency}}</span>
+                </h2>
+                <div *ngFor="let opcion of producto.opcionesSeleccionadas">
+                  <h3>{{opcion.cantidad}} X {{opcion.nombre}} <span *ngIf="opcion.precioVariacion != 0">{{opcion.precioVariacion}}</span></h3>
+                </div>
+                <h3>{{producto.comentario}}</h3>
+                <h3>Subtotal:{{producto.precioTotal | currency}}</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <br>
+              Buscar en: {{pedido.comercioNombre}} <br>
+              Direccion: {{pedido.comercioDireccion}}
+              Telefono:{{pedido.comercioTelefono}}<br>
+              <br>
+            </ion-item>
+            <ion-item>
+              <br>
+              Para: {{pedido.clienteNombre}}<br>
+              Telefono:{{pedido.clienteTelefono}}<br>
+              Direccion: {{pedido.clienteDireccion}}<br>
+              <br>
+              
+            </ion-item>
+            <ion-item *ngIf="pedido.piso != ''">
+              Piso:{{pedido.clientePiso}} <br>
+              Puerta:{{pedido.clientePuerta}}
+            </ion-item>
+          </ion-list>
+          <h2 *ngIf="pedido.estado == '0' && pedido.rechazado != '1'" style="color:rgb(202, 78, 69)">El Comercio aún no ha tomado el pedido</h2>
+          <h2 *ngIf="pedido.estado == '1' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">Demora estimada: {{pedido.faltanMinutos}} minutos</h2>
+          <h2 *ngIf="pedido.estado == '2' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">
+            El pedido se encuentra listo!
+          </h2>
+          <h2 *ngIf="pedido.rechazado == '1'" style="color:rgb(202, 78, 69)">
+            El pedido ha sido rechazado por el comercio
+          </h2>
+          <h2>Total: {{pedido.total | currency}} <br> + <b >Costo de envio<span *ngIf="pedido.costoEnvio != 0">: {{pedido.costoEnvio | currency}} </span> </b></h2>
         </ion-card-content>
         <ion-item>
           <ion-button class="btn-footer-agregar" color="primary" slot="end" (click)="buscado(pedido)">Listo!</ion-button>
@@ -227,9 +220,5 @@
       </ion-card>
     </div>
   </div>
-
-
-    
-
   
 </ion-content>
