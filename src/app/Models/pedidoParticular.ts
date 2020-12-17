@@ -20,10 +20,9 @@ export class PedidoParticular{
     };
     public costoEnvio = 0;
     public comentario = "";
-    public remitente={
-        nombre:"",
-        telefono:""
-    };
+    public remitenteNombre:"";
+    public remitenteId:"";
+    public remitenteTelefono:"";
     public estado = "";
     public cadete = "";
 

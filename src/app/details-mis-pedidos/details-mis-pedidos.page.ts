@@ -20,13 +20,15 @@ export class DetailsMisPedidosPage implements OnInit {
   public pedidosCliente;
   public pedidosATomar;
   public pedidosABuscar;
-  public pedidosParticulares;
+  public pedidosParticularesCadete;
+  public pedidosParticularesCliente;
 
   public commerce_id;
 
   public commerceSubscription:Subscription;
   public subsPedidos:Subscription;
   public subsPedidosComercio:Subscription;
+
 
   public sinPedidos = true;
 
@@ -44,7 +46,8 @@ export class DetailsMisPedidosPage implements OnInit {
     this.pedidosCliente = [];
     this.pedidosABuscar = [];
     this.pedidosATomar = [];
-    this.pedidosParticulares =[];
+    this.pedidosParticularesCadete =[];
+    this.pedidosParticularesCliente=[];
   }
 
   ionViewDidEnter() {
@@ -56,12 +59,26 @@ export class DetailsMisPedidosPage implements OnInit {
     if(this.auth.getActualUser().email == "deliver.pedidos@gmail.com"){
 
       this.pedidosParticularesService.getAll().subscribe((snapshot)=>{
-        this.pedidosParticulares = [];
+        this.pedidosParticularesCadete = [];
         snapshot.forEach((snap: any) => {
           let pedido:any = snap.payload.doc.data();
           pedido.id = snap.payload.doc.id;          
-          this.pedidosParticulares.push(pedido); 
+          this.pedidosParticularesCadete.push(pedido); 
         });
+      })
+
+    }
+    else{
+
+      
+      this.pedidosParticularesService.getAllByClient(this.auth.getActualUser().uid).subscribe((snapshot)=>{
+        this.pedidosParticularesCliente = [];
+        snapshot.forEach((snap: any) => {
+          let pedido:any = snap.payload.doc.data();
+          pedido.id = snap.payload.doc.id;          
+          this.pedidosParticularesCliente.push(pedido); 
+        });
+        console.log(this.pedidosParticularesCliente)
       })
 
     }

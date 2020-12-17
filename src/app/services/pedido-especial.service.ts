@@ -31,6 +31,10 @@ export class PedidoEspecialService {
     return this.firestore.collection(this.collection).snapshotChanges();
   } 
 
+  public getAllByClient(id){
+    return this.firestore.collection(this.collection,ref => ref.where("remitenteId","==",id)).snapshotChanges();
+  }
+
   public update(data:PedidoParticular) {
     const param = JSON.parse(JSON.stringify(data));
     return this.firestore.collection(this.collection).doc(data.id).set(param);

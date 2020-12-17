@@ -10,6 +10,7 @@ import { ModalController, LoadingController, Platform, AlertController, NavContr
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { CarritoPage } from '../carrito/carrito.page';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -67,7 +68,8 @@ export class HomePage  {
     public platform:Platform,
     private localNotifications: LocalNotifications,
     private barcodeScanner: BarcodeScanner,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private toastService:ToastService
   ) {
 
    
@@ -160,8 +162,17 @@ export class HomePage  {
   }
   */
  pedido(){
-  this.router.navigate(['/form-pedido-particular'])
-      }
+
+  if(this.auth.isAuthenticated()){
+    this.router.navigate(['/form-pedido-particular'])
+  }
+  else{
+    this.toastService.alert("","Por favor logueate antes de realizar un pedido");
+    this.router.navigate(['/login'])
+  }
+
+  
+  }
 
 
   getJsonFromUrl(url) {

@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import * as geofirex from 'geofirex';
 import { NavController } from '@ionic/angular';
 import { PedidoEspecialService } from '../services/pedido-especial.service';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class FormPedidoParticularPage implements OnInit {
 
   constructor(
     public navCtrl:NavController,
-    public pedidosParticularesService:PedidoEspecialService
+    public pedidosParticularesService:PedidoEspecialService,
+    private auth:AuthService
   ) { 
 
     this.pedido = new PedidoParticular();
@@ -303,6 +305,7 @@ export class FormPedidoParticularPage implements OnInit {
 
   guardar(){
 
+    this.pedido.remitenteId = this.auth.getActualUser().uid;
     this.pedidosParticularesService.create(this.pedido).then(data =>{
       console.log(data);
       this.navCtrl.back();

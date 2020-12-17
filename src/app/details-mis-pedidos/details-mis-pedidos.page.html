@@ -121,7 +121,7 @@
     </div>
   </div>
   
-  <div *ngFor="let pedido of pedidosParticulares">
+  <div *ngFor="let pedido of pedidosParticularesCadete">
     <ion-card>
         
         <ion-card-header>
@@ -143,6 +143,60 @@
         <ion-card-header>
           <ion-card-title>Comentario</ion-card-title>
           {{pedido.comentario}}
+        </ion-card-header>
+
+
+        <ion-card-header>
+          <ion-card-title>Cliente</ion-card-title>
+          {{pedido.remitenteNombre}}
+        </ion-card-header>
+
+        <ion-card-header>
+          <ion-card-title>Telefono</ion-card-title>
+          {{pedido.remitenteTelefono}}
+        </ion-card-header>
+
+        <ion-item>
+          <ion-button class="btn-footer-agregar" color="primary" slot="end" (click)="buscado(pedido)">Entregado!</ion-button>
+        </ion-item>
+      
+    </ion-card>
+  </div>
+
+
+  <div *ngFor="let pedido of pedidosParticularesCliente">
+    <ion-card>
+        
+        <ion-card-header>
+          <ion-card-title>Desde</ion-card-title>
+          {{pedido.desde.direccion}}
+        </ion-card-header>
+        
+        <ion-card-header>
+          <ion-card-title>Hasta</ion-card-title>
+          {{pedido.hasta.direccion}}
+        </ion-card-header>
+        
+        <ion-card-header>
+          <ion-card-title>Costo envío</ion-card-title>
+          {{pedido.costoEnvio}}
+        </ion-card-header>
+
+        
+        <ion-card-header>
+          <ion-card-title>Comentario</ion-card-title>
+          {{pedido.comentario}}
+        </ion-card-header>
+
+
+        <ion-card-header>
+          <ion-card-title>Cliente</ion-card-title>
+          {{pedido.remitenteNombre}}
+        </ion-card-header>
+
+        <ion-card-header>
+          <ion-card-title>Telefono</ion-card-title>
+          {{pedido.remitenteTelefono}}
         </ion-card-header>
 
         <ion-item>

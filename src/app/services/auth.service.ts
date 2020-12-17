@@ -296,10 +296,12 @@ export class AuthService {
   }
 
   logout() {
+    this.setFCMToken("");
     localStorage.removeItem('user');
     localStorage.removeItem('comercio_seleccionadoId');
     localStorage.removeItem('rol');
-    this.authenticationState.next(false);    
+    this.authenticationState.next(false); 
+       
   }
 
   
