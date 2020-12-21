@@ -68,20 +68,20 @@ export class DetailsMisPedidosPage implements OnInit {
       })
 
     }
-    else{
+  
 
       
-      this.pedidosParticularesService.getAllByClient(this.auth.getActualUser().uid).subscribe((snapshot)=>{
-        this.pedidosParticularesCliente = [];
-        snapshot.forEach((snap: any) => {
-          let pedido:any = snap.payload.doc.data();
-          pedido.id = snap.payload.doc.id;          
-          this.pedidosParticularesCliente.push(pedido); 
-        });
-        console.log(this.pedidosParticularesCliente)
-      })
+    this.pedidosParticularesService.getAllByClient(this.auth.getActualUser().uid).subscribe((snapshot)=>{
+      this.pedidosParticularesCliente = [];
+      snapshot.forEach((snap: any) => {
+        let pedido:any = snap.payload.doc.data();
+        pedido.id = snap.payload.doc.id;          
+        this.pedidosParticularesCliente.push(pedido); 
+      });
+      console.log(this.pedidosParticularesCliente)
+    })
 
-    }
+    
    
 
     //Usuario clásico: solo los pedidos de ese usuario
@@ -343,6 +343,45 @@ export class DetailsMisPedidosPage implements OnInit {
     await alert.present();
   }
   
+
+  async rechazarPedidoParticular(pedido){
+
+    const alert = await this.alertController.create({
+      header: 'Esta seguro?',
+      message: 'Está seguro que desea rechazar el pedido?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }, {
+          text: 'Si',
+          handler: () => { 
+            this.pedidosParticularesService.setPedidoRechazado(pedido)
+            
+          }
+        }
+      ]
+    });
+
+    await alert.present();   
+  }
+
+  entregadoPeiddoParticular(pedido){
+    this.pedidosParticularesService.setPedidoEntregado(pedido)
+  }
+
+
+  confirmarRechazoPedidoParticular(pedido){
+    this.pedidosParticularesService.setConfirmarRechazo(pedido)
+  }
+
+  recibidoPedidoParticular(pedido){
+    this.pedidosParticularesService.setPedidoRecibido(pedido)
+  }
 
 
 }

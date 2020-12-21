@@ -41,6 +41,7 @@ export class FormPedidoParticularPage implements OnInit {
   ) { 
 
     this.pedido = new PedidoParticular();
+
     this.geo = geofirex.init(firebase);
   }
 
@@ -306,6 +307,9 @@ export class FormPedidoParticularPage implements OnInit {
   guardar(){
 
     this.pedido.remitenteId = this.auth.getActualUser().uid;
+
+    console.log(this.pedido);
+
     this.pedidosParticularesService.create(this.pedido).then(data =>{
       console.log(data);
       this.navCtrl.back();
