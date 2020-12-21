@@ -152,7 +152,7 @@
         </ion-card-header>
 
         <ion-card-header>
-          <ion-card-title>Telefono</ion-card-title>
+          <ion-card-title>Teléfono</ion-card-title>
           {{pedido.remitenteTelefono}}
         </ion-card-header>
 
@@ -196,7 +196,7 @@
         </ion-card-header>
 
         <ion-card-header>
-          <ion-card-title>Telefono</ion-card-title>
+          <ion-card-title>Teléfono</ion-card-title>
           {{pedido.remitenteTelefono}}
         </ion-card-header>
 
@@ -262,7 +262,7 @@
           </ion-list>
           <h2 *ngIf="pedido.estado == '0' && pedido.rechazado != '1'" style="color:rgb(202, 78, 69)">El Comercio aún no ha tomado el pedido</h2>
           <h2 *ngIf="pedido.estado == '1' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">Demora estimada: {{pedido.faltanMinutos}} minutos</h2>
-          <h2 *ngIf="pedido.estado == '2' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">
+          <h2 *ngIf="pedido. == '2' && pedido.rechazado != '1'" style="color:rgb(69, 202, 102)">
             El pedido se encuentra listo!
           </h2>
           <h2 *ngIf="pedido.rechazado == '1'" style="color:rgb(202, 78, 69)">
